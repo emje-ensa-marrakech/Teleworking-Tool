@@ -17,6 +17,7 @@ export async function POST(req: Request) {
     console.log(data.password, user!.password);
     
     if (user) {
+        
         if (await argon.verify(user.password,data.password)) {
             const token = await jwt.sign(data.email, `${process.env.TOKEN}`)
             return NextResponse.json(
