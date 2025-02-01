@@ -5,11 +5,11 @@ export async function POST(req: NextRequest) {
     const prisma = new PrismaClient()
     const data = await req.json()
 
-    if (data.id && data.name) {
+    if (data.resId && data.RHid) {
         const user = await prisma.user.findUnique(
             {
                 where: {
-                    id: Number(data.id)
+                    id: Number(data.RHid)
                 }
             }
         )
@@ -25,10 +25,10 @@ export async function POST(req: NextRequest) {
                 }
                 )
             } else {
-                const salle = await prisma.salle.create(
+                await prisma.salle.delete(
                     {
-                        data: {
-                            name: data.name
+                        where: {
+                            id: data.resId
                         }
                     }
                 )
@@ -36,8 +36,7 @@ export async function POST(req: NextRequest) {
                 return NextResponse.json(
                     {
                         "status": "done",
-                        "msg": "salle created",
-                        "salle id": salle.id
+                        "msg": "salle deleted",
                     }
                 )
             }
