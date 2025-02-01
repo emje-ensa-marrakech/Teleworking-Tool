@@ -1,7 +1,3 @@
-POST http://localhost:3000/api/auth/signIn
+GET http://localhost:3000/api/RH/addRoom
 Content-Type: application/json
-
-{
-    "email": "boukairsalah@gmail.com",
-    "password": "salah23AA^@@"
-}
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJvdWthaXJzYWxhaEBnbWFpbC5jb20iLCJpYXQiOjE3MzgzNjg0MTEsImV4cCI6MTczODM3MjAxMX0.Ejgb4zU_6LO-gnityMCZ5aQavKhIKAXnkt0QhMdH1GA

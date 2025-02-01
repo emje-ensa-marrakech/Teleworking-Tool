@@ -45,7 +45,12 @@ export async function POST(req: Request) {
                 }
             }
         )
-        const token = await jwt.sign(data.email, `${process.env.TOKEN}`)
+        const token = jwt.sign(
+            { email: data.email }, // Payload must be an object
+            process.env.TOKEN!,   // Secret key
+            { algorithm: 'HS256', expiresIn: '1h' } // Explicitly set the algorithm
+        )
+        
 
         return NextResponse.json(
             {
