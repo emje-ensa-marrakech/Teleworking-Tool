@@ -1,3 +1,9 @@
-GET http://localhost:3000/api/RH/addRoom
+POST   http://localhost:3000/api/auth/signUp
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJvdWthaXJzYWxhaEBnbWFpbC5jb20iLCJpYXQiOjE3MzgzNjg0MTEsImV4cCI6MTczODM3MjAxMX0.Ejgb4zU_6LO-gnityMCZ5aQavKhIKAXnkt0QhMdH1GA
+# Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1AZ21haWwuY29tIiwiaWF0IjoxNzM5MjA0NzM3fQ.gnwojxWbtj7Q0NCAtmpobA-3ncsA9dow1hNIXaqmxGE
+
+{
+    "name" : "salah",
+    "password" : "m",
+    "type" : "RH"
+}

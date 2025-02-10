@@ -14,7 +14,6 @@ export async function middleware(request: NextRequest) {
 
     try {
         const secret = new TextEncoder().encode(process.env.TOKEN)
-        console.log(process.env.TOKEN);
         
         await jwtVerify(key, secret ,{ algorithms: ['HS256']}) // Verify token using `jose`
     } catch (error) {
