@@ -1,13 +1,12 @@
-## Teleworking-Tool
+# Teleworking-Tool
 
-a project created by EMJE club for AVL company to help theme with managing humain resources 
-and rooms
+A project created by the EMJE club for AVL company to help them manage human resources and rooms.
 
-## Technologies used :
+## Technologies Used
 
-###back-end : 
-    [nextjs] for apis devlopment
-    [mysql] as a database
-    [prisma] as ORM
-    [argon] to hash password
-    [jsonwebtoken] and [jose] to create and manages auth tokens
+### Back-End  
+- **Next.js** for API development  
+- **MySQL** as the database  
+- **Prisma** as the ORM  
+- **Argon** for password hashing  
+- **JSON Web Token (JWT)** and **Jose** for authentication token management  
