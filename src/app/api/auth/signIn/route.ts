@@ -39,6 +39,9 @@ export async function POST(req: Request) {
                     {
                         "status": "error",
                         "msg": "invalid password"
+                    },
+                    {
+                        status :401
                     }
                 )
             }
@@ -47,6 +50,9 @@ export async function POST(req: Request) {
                 {
                     "status": "error",
                     "msg": "invalid user"
+                },
+                {
+                    status :400
                 }
             )
         }
