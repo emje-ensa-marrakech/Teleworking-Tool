@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
     const prisma = new PrismaClient()
     const data = await req.json()
 
-    if (data.RHid) {
+    if (data.RHid && data.roomId) {
         const user = await prisma.user.findUnique(
             {
                 where: {
@@ -15,17 +15,30 @@ export async function GET(req: NextRequest) {
         )
 
         if (user) {
-            if(user.type == "RH") {
-                const rooms = (await prisma.salle.findMany({})).map(
-                    (e)=>{
-                        const {name,id} = e
-                        return {id,name}
+            if (user.type == "RH") {
+                const room = await prisma.salle.findUnique({
+                    where: {
+                        id: data.roomId
                     }
+                })
+
+                const reservations = (await prisma.reservation.findMany(
+                    {
+                        where: {
+                            salleID: data.roomId
+                        }
+                    }
+                )).map(
+                    (e) => {
+                        const { id, time, confirmed } = e
+                        return { id, time, confirmed }
+                    }
+                ) // getting eservations for the room
+
+                return NextResponse.json(
+                    reservations
                 )
                 
-                return NextResponse.json(
-                    rooms
-                )
             } else {
                 return NextResponse.json(
                     {
@@ -35,9 +48,9 @@ export async function GET(req: NextRequest) {
                     {
                         status: 403
                     }
-                )    
+                )
             }
-         } else {
+        } else {
             return NextResponse.json(
                 {
                     "status": "error",
@@ -52,7 +65,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(
             {
                 "status": "error",
-                "msg": "no 'RHid' found in body"
+                "msg": "invalid parametrs"
             },
             {
                 status: 400

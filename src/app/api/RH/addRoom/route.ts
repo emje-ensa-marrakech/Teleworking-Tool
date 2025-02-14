@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
     const prisma = new PrismaClient()
     const data = await req.json()
 
-    if (data.id && data.name) {
+    if (data.id && data.name && data.floor) {
         const user = await prisma.user.findUnique(
             {
                 where: {
@@ -28,7 +28,8 @@ export async function POST(req: NextRequest) {
                 const salle = await prisma.salle.create(
                     {
                         data: {
-                            name: data.name
+                            name: data.name,
+                            floor : data.roof
                         }
                     }
                 )

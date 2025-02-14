@@ -31,7 +31,7 @@ export async function POST(req: Request) {
             });
         }
 
-       const hashedPassword = await argon.hash(data.password);
+        const hashedPassword = await argon.hash(data.password);
 
         const user = await prisma.user.create({
             data: {
@@ -48,6 +48,8 @@ export async function POST(req: Request) {
             { algorithm: 'HS256' } // Explicitly set the algorithm
         );
 
+
+
         return NextResponse.json({
             status: "done! User successfuly signedup!",
             token: token,
@@ -61,15 +63,15 @@ export async function POST(req: Request) {
                 status: "error",
                 message: 'Unique constraint violation: A user with this email already exists.'
             });
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        } if (error instanceof Prisma.PrismaClientKnownRequestError) {
             return NextResponse.json({
                 status: "error",
                 message: `Prisma Error Code: ${error.code}`
             });
 
             // Example: Handle Unique Constraint Violation (P2002)
-            }
-        } else if (error instanceof Prisma.PrismaClientValidationError) {
+        }
+        else if (error instanceof Prisma.PrismaClientValidationError) {
             return NextResponse.json({
                 status: "error",
                 message: `Validation error: ${error.message}`

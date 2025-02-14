@@ -37,5 +37,6 @@ model Reservation {
 model Salle {
   id Int @id @default(autoincrement())
   name String
+  floor String?
   Reservation Reservation[]
 }
