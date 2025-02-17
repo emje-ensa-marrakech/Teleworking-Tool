@@ -9,23 +9,23 @@ export async function GET(req: NextRequest) {
         const user = await prisma.user.findUnique(
             {
                 where: {
-                    id: Number(data.RHid)
+                    id: data.RHid
                 }
             }
         )
 
         if (user) {
-            if (user.type == "RH") {
+            if (user.type == "TLorTLS") {
                 const room = await prisma.salle.findUnique({
                     where: {
-                        id: Number(data.roomId)
+                        id: data.roomId
                     }
                 })
 
                 const reservations = (await prisma.reservation.findMany(
                     {
                         where: {
-                            salleID: Number(data.roomId)
+                            salleID: data.roomId
                         }
                     }
                 )).map(

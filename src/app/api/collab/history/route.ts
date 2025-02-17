@@ -9,7 +9,7 @@ export async function GET(req : NextRequest) {
         const user = await prisma.user.findUnique(
             {
                 where : {
-                    id: data.id
+                    id: Number(data.id)
                 }
             }
         )
@@ -18,13 +18,17 @@ export async function GET(req : NextRequest) {
             const rese = await prisma.reservation.findMany(
                 {
                     where : {
-                        userId : user.id
+                        userId : Number(user.id)
                     }
                 }
             )
             return rese
         } else {
-
+            return NextResponse.json(
+                {
+                    
+                }
+            )
         }
     }else {
         return NextResponse.json(

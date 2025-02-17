@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     if (data.RHid && data.collabName && data.collabEmail && data.collabPassword) {
         const user =await prisma.user.findUnique({
            where: {
-            id : data.RHid
+            id : Number(data.RHid)
            }
         })
 

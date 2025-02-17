@@ -9,7 +9,7 @@ export async function PUT(req : NextRequest) {
         const RH =await prisma.user.findUnique(
             {
                 where : {
-                    id : data.RHid
+                    id : Number(data.RHid)
                 }
             }
         )
@@ -19,7 +19,7 @@ export async function PUT(req : NextRequest) {
                 const reservation = await prisma.reservation.findUnique(
                     {
                         where : {
-                            id : data.resId
+                            id : Number(data.resId)
                         }
                     }
                 )
@@ -36,7 +36,7 @@ export async function PUT(req : NextRequest) {
                         const updated = await prisma.reservation.update(
                             {
                                 where : {
-                                    id : data.resId
+                                    id : Number(data.resId)
                                 },
                                 data : {
                                     confirmed : true
