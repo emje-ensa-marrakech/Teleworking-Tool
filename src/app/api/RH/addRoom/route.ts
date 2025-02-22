@@ -25,13 +25,16 @@ export async function POST(req: NextRequest) {
                 }
                 )
             } else {
-                const salle = await prisma.salle.create(
+                const workspace = await prisma.workspace.create(
                     {
                         data: {
                             name: data.name,
                             floor : data.roof,
                             expired : data.expired,
-                            capacity : data.capacity
+                            capacity : data.capacity,
+                            departement: data.departement,
+                            status: false
+
                         }
                     }
                 )
@@ -39,8 +42,8 @@ export async function POST(req: NextRequest) {
                 return NextResponse.json(
                     {
                         "status": "done",
-                        "msg": "salle created",
-                        "salle id": salle.id
+                        "msg": "workspace created",
+                        "workspace id": workspace.id
                     }
                 )
             }

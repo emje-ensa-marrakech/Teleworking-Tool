@@ -5,21 +5,21 @@ export async function POST(req: NextRequest) {
     const prisma = new PrismaClient();
     const data = await req.json();
 
-    if (data.id && data.time && data.salleId) {
+    if (data.id && data.time && data.workspaceId) {
         const date = new Date(data.time)
 
-        const salle = await prisma.salle.findUnique(
+        const workspace = await prisma.workspace.findUnique(
             {
                 where: {
-                    id: Number(data.salleId)
+                    id: Number(data.workspaceId)
                 }
             }
         )
-        if (salle) {
+        if (workspace) {
             const res = await prisma.reservation.findFirst(
                 {
                     where: {
-                        salleID: data.salleId,
+                        workspaceID: data.workspaceId,
                         time: date
                     }
                 }
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
             const reservation = await prisma.reservation.create(
                 {
                     data: {
-                        salleID: Number(data.salleId),
+                        workspaceID: Number(data.workspaceId),
                         userId: Number(data.id),
                         time: new Date(date),
                         confirmed: false

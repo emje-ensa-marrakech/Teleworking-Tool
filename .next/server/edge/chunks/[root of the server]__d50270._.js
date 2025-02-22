@@ -59,7 +59,7 @@ async function middleware(request) {
 }
 const config = {
     matcher: [
-        '/api/Collaborateur/:path*',
+        '/api/collab/:path*',
         '/api/RH/:path*',
         '/api/TlorSTL/:path*'
     ]

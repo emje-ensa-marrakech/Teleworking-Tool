@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
         if (user) {
             if (user.type == "TLorTLS") {
-                const room = await prisma.salle.findUnique({
+                const room = await prisma.workspace.findUnique({
                     where: {
                         id: data.roomId
                     }
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
                 const reservations = (await prisma.reservation.findMany(
                     {
                         where: {
-                            salleID: data.roomId
+                            workspaceID: data.roomId
                         }
                     }
                 )).map(

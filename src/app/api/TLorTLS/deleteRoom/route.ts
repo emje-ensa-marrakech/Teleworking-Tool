@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
                 }
                 )
             } else {
-                await prisma.salle.delete(
+                await prisma.workspace.delete(
                     {
                         where: {
                             id: data.resId
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
                 return NextResponse.json(
                     {
                         "status": "done",
-                        "msg": "salle deleted",
+                        "msg": "workspace deleted",
                     }
                 )
             }

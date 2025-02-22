@@ -5,10 +5,10 @@ export async function GET(req: NextRequest) {
     const prisma = new PrismaClient()
     const data = await req.json()
 
-    if(data.floor || data.name){
+    if(data.floor || data.name || data.departement){
         
-        if(!data.floor){
-            return await prisma.salle.findMany(
+        if(!data.floor && !data.departement){
+            return await prisma.workspace.findMany(
                 {
                     where : {
                         name :data.name,
@@ -16,8 +16,8 @@ export async function GET(req: NextRequest) {
                 }
             )
             
-        } else if (!data.name){
-            return  await prisma.salle.findMany(
+        } else if (!data.name && !data.departement){
+            return  await prisma.workspace.findMany(
                 {
                     where : {
                         floor :data.floor,
@@ -25,8 +25,20 @@ export async function GET(req: NextRequest) {
                 }
             )
             
-        } else {
-            return  await prisma.salle.findMany(
+        } 
+        else if (!data.floor && !data.name){
+            return  await prisma.workspace.findMany(
+                {
+                    where : {
+                        departement :data.departement,
+                    }
+                }
+            )
+            
+        }
+        
+        else {
+            return  await prisma.workspace.findMany(
                 {
                     where : {
                         floor :data.floor,
