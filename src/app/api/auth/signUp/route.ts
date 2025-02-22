@@ -39,6 +39,7 @@ export async function POST(req: Request) {
                 name: data.name,
                 password: hashedPassword,
                 type: data.type,
+    
             }
         });
 

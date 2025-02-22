@@ -125,14 +125,15 @@ async function POST(req) {
                 msg: "invalid email"
             });
         }
+        // check user type 
         if (data.type != "TLorSTL" && data.type != "collaborateur" && data.type != "RH") {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 status: "error",
                 msg: "invalid type"
             });
         }
-        let hashedPassword = await __TURBOPACK__imported__module__$5b$externals$5d2f$argon2__$5b$external$5d$__$28$argon2$2c$__cjs$29$__["default"].hash(data.password);
-        let user = await prisma.user.create({
+        const hashedPassword = await __TURBOPACK__imported__module__$5b$externals$5d2f$argon2__$5b$external$5d$__$28$argon2$2c$__cjs$29$__["default"].hash(data.password);
+        const user = await prisma.user.create({
             data: {
                 email: data.email,
                 name: data.name,
@@ -147,17 +148,24 @@ async function POST(req) {
         } // Explicitly set the algorithm
         );
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            status: "done",
+            status: "done! User successfuly signedup!",
             token: token,
             userId: user.id
         });
     } catch (error) {
+        // making an output depending on the user type
         if (error.code === 'P2002') {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 status: "error",
                 message: 'Unique constraint violation: A user with this email already exists.'
             });
-            "TURBOPACK unreachable";
+        }
+        if (error instanceof __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$29$__["Prisma"].PrismaClientKnownRequestError) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                status: "error",
+                message: `Prisma Error Code: ${error.code}`
+            });
+        // Example: Handle Unique Constraint Violation (P2002)
         } else if (error instanceof __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$29$__["Prisma"].PrismaClientValidationError) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 status: "error",

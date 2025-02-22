@@ -71,7 +71,7 @@ var __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$ex
 async function POST(req) {
     const prisma = new __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$29$__["PrismaClient"]();
     const data = await req.json();
-    if (data.id && data.name) {
+    if (data.id && data.name && data.floor && data.expired && data.capacity) {
         const user = await prisma.user.findUnique({
             where: {
                 id: Number(data.id)
@@ -86,15 +86,20 @@ async function POST(req) {
                     status: 403
                 });
             } else {
-                const salle = await prisma.salle.create({
+                const workspace = await prisma.workspace.create({
                     data: {
-                        name: data.name
+                        name: data.name,
+                        floor: data.roof,
+                        expired: data.expired,
+                        capacity: data.capacity,
+                        departement: data.departement,
+                        status: false
                     }
                 });
                 return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                     "status": "done",
-                    "msg": "salle created",
-                    "salle id": salle.id
+                    "msg": "workspace created",
+                    "workspace id": workspace.id
                 });
             }
         } else {

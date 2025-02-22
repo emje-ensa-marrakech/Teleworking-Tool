@@ -115,36 +115,46 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$serv
 async function POST(req) {
     const prisma = new __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$29$__["PrismaClient"]();
     const data = await req.json();
-    const user = await prisma.user.findUnique({
-        where: {
-            email: data.email
-        }
-    });
-    console.log(data.password, user.password);
-    if (user) {
-        if (await __TURBOPACK__imported__module__$5b$externals$5d2f$argon2__$5b$external$5d$__$28$argon2$2c$__cjs$29$__["default"].verify(user.password, data.password)) {
-            const token = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$jsonwebtoken$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].sign({
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
                 email: data.email
-            }, process.env.TOKEN, {
-                algorithm: 'HS256'
-            } // Explicitly set the algorithm
-            );
-            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                "status": "done",
-                "jwt": token,
-                "type": user.type,
-                "id": user.id
-            });
+            }
+        });
+        if (user) {
+            if (await __TURBOPACK__imported__module__$5b$externals$5d2f$argon2__$5b$external$5d$__$28$argon2$2c$__cjs$29$__["default"].verify(user.password, data.password)) {
+                const token = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$jsonwebtoken$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].sign({
+                    email: data.email
+                }, process.env.TOKEN, {
+                    algorithm: 'HS256'
+                } // Explicitly set the algorithm
+                );
+                return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                    "status": "done! User successfuly signed in",
+                    "jwt": token,
+                    "type": user.type,
+                    "id": user.id
+                });
+            } else {
+                return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                    "status": "error",
+                    "msg": "invalid password"
+                }, {
+                    status: 401
+                });
+            }
         } else {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 "status": "error",
-                "msg": "invalid password"
+                "msg": "invalid user"
+            }, {
+                status: 400
             });
         }
-    } else {
+    } catch (e) {
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            "status": "error",
-            "msg": "invalid user"
+            status: "error",
+            message: `Unknown error: ${e}`
         });
     }
 }

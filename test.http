@@ -1,10 +1,13 @@
-POST   http://localhost:3000/api/auth/signUp
+POST   http://localhost:3000/api/collab/madeReservation
 Content-Type: application/json
-# Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1AZ21haWwuY29tIiwiaWF0IjoxNzM5MjA0NzM3fQ.gnwojxWbtj7Q0NCAtmpobA-3ncsA9dow1hNIXaqmxGE
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJvdWRhZHNhbWlyYUBnbWFpbC5jb20iLCJpYXQiOjE3NDAyMjUyMzN9.gbNOFof0B_EufTXD8wAwbhC5QZfMqITBRBzfe9fdpq4
 
 {
-    "name" : "salah",
-    "password" : "m",
+    "name" : "boudad Samira",
+    "gender" : "Mrs",
+    "department" : "RH",
+    "personalNumber" : 123456789,
+    "password" : "1234",
     "type" : "RH",
-    "email" : "boukairsalah@gmail.com"
+    "email" : "boudadsamira@gmail.com"
 }
