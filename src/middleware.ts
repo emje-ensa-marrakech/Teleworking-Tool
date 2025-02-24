@@ -25,5 +25,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/api/collab/:path*', '/api/RH/:path*', '/api/TlorSTL/:path*'],
+    matcher: ['/api/collab/:path*', '/api/RH/:path*', '/api/TlorSTL/:path*','/api/generale/:path*'],
 }
