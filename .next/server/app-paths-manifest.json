@@ -1,6 +1,8 @@
 {
-  "/page": "app/page.js",
+  "/analytics/page": "app/analytics/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/signIn/page": "app/signIn/page.js",
-  "/api/auth/signIn/route": "app/api/auth/signIn/route.js"
+  "/api/TLorTLS/space-occupancy-rate/route": "app/api/TLorTLS/space-occupancy-rate/route.js",
+  "/api/TLorTLS/reservation-per-month/route": "app/api/TLorTLS/reservation-per-month/route.js",
+  "/api/TLorTLS/reservation-rate-by-service/route": "app/api/TLorTLS/reservation-rate-by-service/route.js",
+  "/_not-found/page": "app/_not-found/page.js"
 }

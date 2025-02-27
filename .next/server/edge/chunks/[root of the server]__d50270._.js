@@ -61,7 +61,8 @@ const config = {
     matcher: [
         '/api/collab/:path*',
         '/api/RH/:path*',
-        '/api/TlorSTL/:path*'
+        '/api/TlorSTL/:path*',
+        '/api/generale/:path*'
     ]
 };
 }}),

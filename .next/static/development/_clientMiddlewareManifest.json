@@ -10,5 +10,9 @@
   {
     "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/api\\/TlorSTL(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(\\\\.json)?[\\/#\\?]?$",
     "originalSource": "/api/TlorSTL/:path*"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/api\\/generale(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/api/generale/:path*"
   }
 ]
