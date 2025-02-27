@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   BarChart,
   Bar,
@@ -12,26 +13,11 @@ import {
   Legend,
 } from "recharts";
 
-import { Home, Calendar, Settings, Bell, DivideIcon } from "lucide-react";
+import { Home, Calendar, Settings, Bell } from "lucide-react";
 
 const attendanceData = [
   { name: "Present", value: 36.2 },
   { name: "Missed Attendance", value: 63.8 },
-];
-
-const reservationData = [
-  { name: "Finance Service", value: 30.3 },
-  { name: "IT Service", value: 13.1 },
-  { name: "Sales Service", value: 28.6 },
-  { name: "Quality Service", value: 28 },
-];
-
-const spaceOccupancyData = [
-  { name: "Conference Room", value: 100 },
-  { name: "TISAX 1", value: 50 },
-  { name: "IT Room 2", value: 70 },
-  { name: "Sales Room 4", value: 20 },
-  { name: "TISAX 5", value: 30 },
 ];
 
 export default function Dashboard() {
@@ -40,7 +26,9 @@ export default function Dashboard() {
 
   const [spaceOccupancyRate, setSpaceOccupancyRate] = useState([]);
   const [reservationPerMonth, setReservationPerMonth] = useState([]);
-  const [reservationPerService, setReservationPerService] = useState<{ name: string; value: number }[]>([]);
+  const [reservationPerService, setReservationPerService] = useState<
+    { name: string; value: number }[]
+  >([]);
   const colors = ["#38a3a5", "#02c39a", "#4AA659", "#1e5c28", "#FF5733"];
 
   const totalReservations = reservationPerService.reduce(
@@ -56,7 +44,6 @@ export default function Dashboard() {
       })
       .catch((err) => console.error("Error fetching data:", err));
   }, []);
-
 
   useEffect(() => {
     fetch("/api/TLorTLS/reservation-per-month")
@@ -80,10 +67,6 @@ export default function Dashboard() {
       })
       .catch((err) => console.error("Error fetching data:", err));
   }, []);
-  
-
-
-  
 
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-100">
@@ -93,16 +76,16 @@ export default function Dashboard() {
         <nav className="flex flex-col flex-grow space-y-4">
           <Home className="mt-10 " size="48" />
           <div className="flex items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black">
-            <div>Home</div>
+            <Link href="/analytics">Home</Link>
           </div>
           <Calendar size="48" />
           <div className="flex items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black">
-            <span>Reservations</span>
+            <Link href="/analytics">Reservations</Link>
           </div>
           <div className="flex-1"></div>
           <Settings size="48" />
           <div className="flex items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black mt-auto">
-            <span>Settings</span>
+            <Link href="/analytics">Settings</Link>
           </div>
         </nav>
       </aside>
@@ -229,7 +212,7 @@ export default function Dashboard() {
                   cy="50%"
                   innerRadius={60}
                   outerRadius={100}
-                  label={({ value }) => `${(value/totalReservations)*100}%`}
+                  label={({ value }) => `${(value / totalReservations) * 100}%`}
                 >
                   {reservationPerService.map((entry, index) => (
                     <Cell
