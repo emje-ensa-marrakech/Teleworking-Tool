@@ -71,7 +71,7 @@ export default function page() {
 
 }
 
-const ss = (time,room,floor) => {
+const ss = (time:any,room:any,floor:any) => {
     return <div className="m-2"> <div className="flex justify-center items-center flex-row">
         <div className="text-[rgba(74,166,89,1)] text-xl p-2  bg-[rgba(120,216,123,0.24)] w-fit m-2">
             <PiCalendarDotsFill />
