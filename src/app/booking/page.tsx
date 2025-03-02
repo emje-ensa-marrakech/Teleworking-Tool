@@ -1,6 +1,47 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import Card from "./card";
+import IdCard from "./card_id"; // Vérifie que le fichier a le bon nom et chemin
+
+interface Reservation {
+    id: number;
+    title: string;
+    department: string;
+    team: string;
+    author: string;
+    date: string;
+    jobTitle: string;
+    name: string;
+    imageSrc: string;
+}
+
 
 export default function booking(){
+
+
+    // Liste des réservations (Exemple, à remplacer par des données dynamiques si besoin)
+    const reservations: Reservation[] = [
+        { 
+            id: 1, title: "Meeting Room 1", department: "HR", team: "Recruitment", 
+            author: "John Doe", date: "2025-03-02", jobTitle: "Recruiter", 
+            name: "John Doe", imageSrc: "./booking/imgpro.jpg" 
+        },
+        { 
+            id: 2, title: "Conference Hall", department: "IT", team: "Development", 
+            author: "Alice Smith", date: "2025-03-05", jobTitle: "Developer", 
+            name: "Alice Smith", imageSrc: "./booking/imgpro.jpg" 
+        },
+        { 
+            id: 3, title: "Private Office", department: "Finance", team: "Accounting", 
+            author: "Bob Brown", date: "2025-03-10", jobTitle: "Accountant", 
+            name: "Bob Brown", imageSrc: "./booking/imgpro.jpg" 
+        }
+    ];
+
+    // État pour stocker la réservation sélectionnée et afficher l'ID Card
+    const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+
+
     return (
 <div className="booking">
     <div className="container">
@@ -76,28 +117,38 @@ export default function booking(){
 
         <div className="continer2">
             <div className="cards">
-                {/*<div className="card">
-                    <div className="title"></div>
-                    <div className="info1">
-                        <p><span className="bold"></span><br/></p>
-                        <p><span className="bold"></span><br/></p>
-                    </div>
-                    <div className="info2">
-                        <p><span className="bold"></span><br/></p>
-                        <p><span className="bold"></span><br/></p>
-                    </div>
-                    <div className="actions">
-                        <button className="accept"></button>
-                        <button className="decline"></button>
-                    </div>
-                </div>*/}
+                            {/* Affichage dynamique des cartes */}
+                            {reservations.map((reservation) => (
+                                <Card
+                                    key={reservation.id}
+                                    title={reservation.title}
+                                    department={reservation.department}
+                                    team={reservation.team}
+                                    author={reservation.author}
+                                    date={reservation.date}
+                                    onClick={() => setSelectedReservation(reservation)}
+                                />
+                            ))}
             </div>
-            <div className="spacesnbr">
-                <div className="booked-spaces">Booked Spaces :</div>
-                <div className="available-spaces">Available Spaces :</div>
-            </div>
+                    <div className="spacesnbr">
+                        <div className="booked-spaces">Booked Spaces :</div>
+                        <div className="available-spaces">Available Spaces :</div>
+                    </div>
         </div>
-    </div>
+       </div>
+        {/* Affichage de l'ID Card lorsqu'on clique sur une carte */}
+        {selectedReservation && (
+                <IdCard
+                    id={selectedReservation.id}
+                    jobTitle={selectedReservation.jobTitle}
+                    name={selectedReservation.name}
+                    team={selectedReservation.team}
+                    imageSrc={selectedReservation.imageSrc}
+                    visible={!!selectedReservation}
+                    onClose={() => setSelectedReservation(null)}
+                />
+            )}
+
 </div>
 );
 }

@@ -70,7 +70,7 @@ a {
     @apply w-[170px];
 }
 
-.human-ressources {
+.human-ressources , .reserve-rooms{
     @apply w-[185px] h-[47px] flex-shrink-0 rounded-[20px] bg-gradient-to-r from-green-500/50 to-cyan-500/50;
 }
 
@@ -131,37 +131,6 @@ a {
 }
 
 
-/*id card*/
-
-
-.section {
-    @apply flex justify-center items-center h-screen bg-gray-100 font-sans;
-}
-.id-card {
-    @apply w-[350px] bg-white p-4 rounded-lg shadow-md border border-gray-300;
-}
-.id-card-header {
-    @apply flex justify-between items-center font-bold text-base pb-1 border-b-2 border-black;
-}
-.profile-container {
-    @apply flex items-center my-4;
-}
-.profile-img {
-    @apply w-[100px] h-[100px] rounded-md object-cover;
-}
-.id-card-content {
-    @apply ml-4 text-sm;
-}
-.bold {
-    @apply font-bold;
-}
-.attendance {
-    @apply text-sm font-bold mt-4 flex items-center justify-between;
-}
-.calendar-icon {
-    @apply w-5 h-5;
-}
-
 
 
 /*card*/
@@ -185,13 +154,16 @@ a {
 .actions {
     @apply mt-4 flex justify-center gap-4;
 }
-.accept {
+.accept , .reserve{
     @apply text-purple-700 font-bold cursor-pointer text-lg px-3 py-1 rounded-lg bg-white;
 }
 .decline {
     @apply text-gray-700 font-bold cursor-pointer text-lg px-3 py-1 rounded-lg bg-white;
 }
 .accept:hover {
+    @apply underline;
+}
+.reserve:hover {
     @apply underline;
 }
 .decline:hover {
@@ -203,3 +175,45 @@ a {
 .info1, .info2 {
     @apply flex justify-around my-2;
 }
+ 
+
+/*map2*/
+
+.filter-salles {
+    @apply  flex items-center justify-center gap-4 p-2 border border-gray-300 rounded-lg bg-gray-100 max-w-[500px] h-auto;
+}
+
+.filter-salles label {
+    @apply flex flex-col items-center justify-center text-sm font-semibold text-gray-800;
+}
+
+.filter-salles select, 
+.filter-salles input {
+    @apply p-2 m-2 border border-gray-300 rounded-2xl text-sm text-center min-w-[120px];
+}
+
+.filter2 {
+    @apply flex justify-center items-start mt-[140px];
+}
+.container-reserve-room{
+    @apply flex flex-wrap justify-start items-center gap-12 mr-[20px] ml-[200px] mt-[60px];
+}
+.card-room{
+    @apply bg-white w-[270px] mt-[60px] ml-[60px] rounded-lg shadow-md p-5;
+}
+.info-room {
+    @apply flex flex-col gap-5;
+}
+
+.room {
+    @apply text-center font-bold underline text-xl;
+}
+
+.info2-room {
+    @apply self-end;
+}
+.card-room p {
+    @apply text-base text-gray-600;
+}
+
+
