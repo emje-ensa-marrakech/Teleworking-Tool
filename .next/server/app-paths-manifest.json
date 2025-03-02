@@ -1,9 +1,4 @@
 {
-  "/page": "app/page.js",
-  "/signIn/page": "app/signIn/page.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/analytics/page": "app/analytics/page.js",
-  "/api/TLorTLS/space-occupancy-rate/route": "app/api/TLorTLS/space-occupancy-rate/route.js",
-  "/api/TLorTLS/reservation-rate-by-service/route": "app/api/TLorTLS/reservation-rate-by-service/route.js",
-  "/api/TLorTLS/reservation-per-month/route": "app/api/TLorTLS/reservation-per-month/route.js"
+  "/booking/page": "app/booking/page.js",
+  "/_not-found/page": "app/_not-found/page.js"
 }
