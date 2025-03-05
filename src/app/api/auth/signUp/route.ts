@@ -39,6 +39,9 @@ export async function POST(req: Request) {
                 name: data.name,
                 password: hashedPassword,
                 type: data.type,
+                gender: data.gender,
+                department: data.department,
+                personalNumber: Number(data.personalNumber)
     
             }
         });

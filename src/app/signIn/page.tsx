@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-
+import { useRouter } from 'next/navigation';
 export default function page() {
     const [visiblePassword, setVisibility] = useState(false);
     const [email, setEmail] = useState('');
@@ -12,7 +12,7 @@ export default function page() {
     const [clicked, setClicked] = useState(false);
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(false);
-
+    const router = useRouter();
     return <div className='bg-[url("/bg.png")] bg-cover bg-center h-screen w-screen'>
         <div className='bg-gradient-to-b from-[rgb(0,166,188,0.5)] via-[rgb(246,255,255,0.5)] to-[rgb(76,175,78,0.5)] h-screen w-screen'>
             <header>
@@ -83,18 +83,20 @@ export default function page() {
                             })
                         })
                         if (res.status === 200){
+            
+                            const data = await res.json()
                             if(remember){
-                                const data = await res.json()
                                 localStorage.setItem('token',data.jwt)
                                 localStorage.setItem('type',data.type)
                                 localStorage.setItem('id',data.id)
                             } else {
-                                const data = await res.json()
                                 sessionStorage.setItem('token',data.jwt)
                                 sessionStorage.setItem('type',data.type)
                                 sessionStorage.setItem('id',data.id)
                             }
+                        
                             setLoading(false)
+                            if(data.type=="collaborateur")  router.push("/collab/home");
                         }
                         else {
                             setError(true)

@@ -2,6 +2,7 @@
 import React from "react";
 import { RoomData } from "./type";
 import { roomPosition1 } from "./roomPosition1";
+import data from "./data.json";
 
 interface FirstEtageProps {
   rooms: RoomData[]; // Add rooms prop
@@ -103,23 +104,33 @@ const FirstEtage: React.FC<FirstEtageProps> = ({ rooms, onRoomClick }) => {
         <line x1="740" y1="190" x2="800" y2="190" stroke="black" strokeWidth="2" />
 
         {/* Render rooms */}
-        {rooms.map((room) => {
-          const layout = roomPosition1[room.id]; // Get layout data for this room
-          return (
-            <rect
-              key={room.id}
-              className="room transition-all duration-300 ease-in-out transform origin-center relative cursor-pointer" // Add cursor-pointer
-              x={layout.x}
-              y={layout.y}
-              width={layout.width}
-              height={layout.height}
-              fill={room.fill}
-              stroke="grey"
-              strokeWidth="2"
-              onClick={() => onRoomClick(room)}
-            />
-          );
-        })}
+        {
+  Object.keys(roomPosition1).map((id) => {
+    // Check if the room with this id exists in data.json
+    const roomData = data.find(r => r.id === id);
+
+    // Get the layout for this id from roomPosition1
+    const layout = roomPosition1[id];
+
+    // Determine the fill color based on whether the room exists in data.json
+    const fillColor = roomData ? (roomData.status ? "#c1f1ba" : "#fdbaa9") : "lightgrey"; // If room exists, use its fill color; else grey
+
+    return (
+      <rect
+        key={id}
+        className="room transition-all duration-300 ease-in-out transform origin-center relative cursor-pointer" // Add cursor-pointer
+        x={layout.x}
+        y={layout.y}
+        width={layout.width}
+        height={layout.height}
+        fill={fillColor} // Use determined fill color
+        stroke="grey"
+        strokeWidth="2"
+        onClick={() => onRoomClick(roomData || { id, name: `Room ${id}`, status: false })} // Handle the click event
+      />
+    );
+  })
+}
       </svg>
     </div>
   );

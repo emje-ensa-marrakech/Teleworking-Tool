@@ -14,47 +14,44 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  gender   String
-  department String
+  id             Int           @id @default(autoincrement())
+  email          String        @unique
+  gender         String
+  department     String
   personalNumber Int
-  name     String
-  workshours Int?
-  password String
-  type String //'TLorSTL' 'collaborateur' 'RH'
-  Reservation Reservation[]
-
+  name           String
+  workshours     Int?
+  password       String
+  type           String //'TLorSTL' 'collaborateur' 'RH'
+  Reservation    Reservation[]
 }
 
 model Reservation {
-  id        Int     @id @default(autoincrement())
-  time DateTime @default(now())
-  workspaceID   Int
-  userId    Int
-  confirmed Boolean
-  workspace     Workspace  @relation(fields: [workspaceID], references: [id])
-  user     User   @relation(fields: [userId], references: [id])
-  Attendence Attendence[]
-
+  id          Int          @id @default(autoincrement())
+  time        DateTime     @default(now())
+  workspaceID Int
+  userId      Int
+  confirmed   Boolean
+  workspace   Workspace    @relation(fields: [workspaceID], references: [id])
+  user        User         @relation(fields: [userId], references: [id])
+  Attendence  Attendence[]
 }
 
 model Workspace {
-  id Int @id @default(autoincrement())
-  name String
+  id          Int           @id @default(autoincrement())
+  name        String
   departement String
-  status Boolean
-  available Int?
-  floor Int? 
-  capacity Int?
-  expired DateTime?
+  status      Boolean
+  available   Int?
+  floor       Int?
+  capacity    Int?
+  expired     DateTime?
   Reservation Reservation[]
 }
 
-
 model Attendence {
-  id Int @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   id_resrvation Int
-  time DateTime @default(now())
-  Reservation Reservation @relation(fields: [id_resrvation], references: [id])
+  time          DateTime    @default(now())
+  Reservation   Reservation @relation(fields: [id_resrvation], references: [id])
 }

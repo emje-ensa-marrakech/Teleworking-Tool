@@ -21,24 +21,24 @@ export async function GET(req: NextRequest) {
             }
         )
 
-        const notification = await prisma.notification.findMany(
-            {
-                where : {
-                    userId : Number(id)
-                }
-            }
-        )
+        // const notification = await prisma.notification.findMany(
+        //     {
+        //         where : {
+        //             userId : Number(id)
+        //         }
+        //     }
+        // )
 
-        await prisma.notification.updateMany(
-            {
-                where : {
-                    userId : Number(id)
-                },
-                data : {
-                    seen : true
-                }
-            }
-        )
+        // await prisma.notification.updateMany(
+        //     {
+        //         where : {
+        //             userId : Number(id)
+        //         },
+        //         data : {
+        //             seen : true
+        //         }
+        //     }
+        // )
         const avilabe = rooms.filter((e)=>!e.status)
 
         const rese = await prisma.reservation.findMany({})
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(
             {
                 "name": user!.name,
-                "notifications": notification,
+                // "notifications": notification,
                 "available": avilabe.length,
                 "resMade": rese.length,
                 "your" : resMad.length,
