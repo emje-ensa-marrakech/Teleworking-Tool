@@ -139,7 +139,21 @@ const Home: React.FC = () => {
         </div>
         <div className="flex flex-col items-center w-40 h-24 mx-2">
           <h3 className="mb-1 text-sm font-semibold">Date:</h3>
-          <input type="date" id="date" name="date" className="p-2 border border-black rounded-full text-sm"/>
+          <select name="plateau" id="plateau" className="p-2 border border-black rounded-full text-sm">
+            <option selected disabled>Select a Mounth</option>
+            <option value="january">January</option>
+            <option value="february">February</option>
+            <option value="march">March</option>
+            <option value="april">April</option>
+            <option value="may">May</option>
+            <option value="june">June</option>
+            <option value="july">July</option>
+            <option value="august">August</option>
+            <option value="september">September</option>
+            <option value="october">October</option>
+            <option value="november">November</option>
+            <option value="december">December</option>
+          </select>
         </div>
       </div>
       {selectedFloor === "floor2" ? (

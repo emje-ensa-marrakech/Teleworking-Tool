@@ -138,7 +138,10 @@ async function POST(req) {
                 email: data.email,
                 name: data.name,
                 password: hashedPassword,
-                type: data.type
+                type: data.type,
+                gender: data.gender,
+                department: data.department,
+                personalNumber: Number(data.personalNumber)
             }
         });
         const token = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$jsonwebtoken$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].sign({

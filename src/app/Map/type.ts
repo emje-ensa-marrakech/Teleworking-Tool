@@ -8,6 +8,4 @@ export interface RoomData {
   floor: string;
   capacity: string;
   expired: string;
-  fill: string;
-  initialColor: string;
 }

@@ -59,7 +59,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
       >
         Close
       </button>
-      {permission && (roomData.fill === "#c1f1ba" || roomData.fill === "#f1e4ba") && (
+      {permission && (roomData.status === true ) && (
         <button
           className="bg-blue-500 text-white px-3 py-2 rounded-lg cursor-pointer mt-4 ml-1"
           onClick={handleReserveRelease} // Reserve/Release and close the card
