@@ -92,14 +92,14 @@ a {
 }
 
 .booked-spaces {
-    @apply w-[270px] h-[100px] flex-shrink-0 rounded-[30px] bg-cyan-300/30 text-center text-black
-           text-2xl font-bold leading-normal pt-7;
+    @apply max-w-[250px] h-[100px] flex-shrink-0 rounded-[30px] bg-cyan-300/30 text-center text-black
+           text-xl font-bold leading-normal pt-7;
     font-family: 'Inter', sans-serif; 
 }
 
 .available-spaces {
-    @apply w-[270px] h-[100px] flex-shrink-0 rounded-[30px] bg-green-200 text-center text-black
-           text-2xl font-bold leading-normal pt-7;
+    @apply w-[250px] h-[100px] flex-shrink-0 rounded-[30px] bg-green-200 text-center text-black
+           text-xl font-bold leading-normal pt-7;
     font-family: 'Inter', sans-serif;
 }
 
@@ -127,7 +127,7 @@ a {
 }
 
 .cards {
-    @apply flex flex-wrap justify-start items-center gap-12 mr-[50px] ml-[200px] mt-[60px];
+    @apply flex flex-wrap justify-start items-center gap-2 mr-[5px] ml-[155px] mt-[20px];
 }
 
 
@@ -136,11 +136,9 @@ a {
 /*card*/
 
 
-.cards {
-    @apply flex flex-wrap justify-start items-center gap-12 mr-[50px] ml-[200px] mt-[60px];
-}
+
 .card {
-    @apply bg-white w-[350px] mt-[60px] ml-[60px] rounded-lg shadow-md p-5;
+    @apply bg-white w-[300px] mt-[10px]  rounded-lg shadow-md p-5;
 }
 .card p {
     @apply text-base text-gray-600;
@@ -152,7 +150,7 @@ a {
     @apply text-center text-xl font-bold underline ;
 }
 .actions {
-    @apply mt-4 flex justify-center gap-4;
+    @apply mt-4 flex justify-center gap-2;
 }
 .accept , .reserve{
     @apply text-purple-700 font-bold cursor-pointer text-lg px-3 py-1 rounded-lg bg-white;

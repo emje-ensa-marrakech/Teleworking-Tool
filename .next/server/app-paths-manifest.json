@@ -1,13 +1,5 @@
 {
-  "/page": "app/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/booking/page": "app/booking/page.js",
   "/api/TLorTLS/get-all-reservations/route": "app/api/TLorTLS/get-all-reservations/route.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/api/TLorTLS/update-reservation/[id]/route": "app/api/TLorTLS/update-reservation/[id]/route.js",
-  "/test-page/page": "app/test-page/page.js",
-  "/analytics/page": "app/analytics/page.js",
-  "/api/TLorTLS/reservation-per-month/route": "app/api/TLorTLS/reservation-per-month/route.js",
-  "/api/TLorTLS/reservation-rate-by-service/route": "app/api/TLorTLS/reservation-rate-by-service/route.js",
-  "/api/TLorTLS/space-occupancy-rate/route": "app/api/TLorTLS/space-occupancy-rate/route.js"
+  "/api/TLorTLS/update-reservation/[id]/route": "app/api/TLorTLS/update-reservation/[id]/route.js"
 }
