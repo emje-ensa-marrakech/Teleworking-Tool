@@ -1,5 +1,0 @@
-{
-  "/booking/page": "app/booking/page.js",
-  "/api/TLorTLS/get-all-reservations/route": "app/api/TLorTLS/get-all-reservations/route.js",
-  "/api/TLorTLS/update-reservation/[id]/route": "app/api/TLorTLS/update-reservation/[id]/route.js"
-}
