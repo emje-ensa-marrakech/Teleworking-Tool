@@ -68,10 +68,9 @@ const Filters: React.FC<{ onFilterChange: (filters: FiltersState) => void }> = (
         onChange={handleFilterChange}
         className="p-2 border rounded"
       >
-        <option value="all">All Statuses</option>
-        <option value="Reserved">Reserved</option>
-        <option value="Processing">Processing</option>
-        <option value="Rejected">Rejected</option>
+        <option value="all">Select Status</option>
+        <option value="Present">Present</option>
+        <option value="Absent">Absent</option>
       </select>
       <button onClick={resetFilters} className="bg-red-500 text-white px-4 py-2 rounded">
         Reset Filter
@@ -81,9 +80,29 @@ const Filters: React.FC<{ onFilterChange: (filters: FiltersState) => void }> = (
 };
 
 const AVLSpace: React.FC = () => {
-  const handleFilterChange = (filters: FiltersState) => {
-    console.log("Applied Filters:", filters);
+  const [filters, setFilters] = useState<FiltersState>({
+    date: null,
+    department: "all",
+    status: "all",
+  });
+
+  const handleFilterChange = (newFilters: FiltersState) => {
+    setFilters(newFilters);
   };
+
+  const data = [
+    { id: "U30G25", name: "Christine Brooks", space: "TISAX 5", date: "14 Feb 2019", dept: "IT", status: "Present" },
+    { id: "U42B18", name: "John Smith", space: "Tisax 4", date: "25 Mar 2020", dept: "HR", status: "Absent" }
+  ];
+
+  // Apply filters
+  const filteredData = data.filter((row) => {
+    const matchesDate = filters.date ? row.date === filters.date : true;
+    const matchesDept = filters.department === "all" || row.dept === filters.department;
+    const matchesStatus = filters.status === "all" || row.status === filters.status;
+
+    return matchesDate && matchesDept && matchesStatus;
+  });
 
   return (
     <div className="flex w-full bg-gray-100">
@@ -102,26 +121,7 @@ const AVLSpace: React.FC = () => {
         </nav>
       </aside>
       <main className="flex-1 p-5">
-        <header className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
-          <img src="/logo.png" className="w-40" alt="AVL Space" />
-          <div className="flex items-center gap-6">
-            <span className="relative">
-              <svg width="33" height="34" viewBox="0 0 33 34" fill="none">
-                <path d="M5.5 26.9168V24.0835H8.25..." fill="#1D1B20" />
-              </svg>
-            </span>
-            <span className="bg-gradient-to-r from-green-400 to-blue-400 py-2 px-4 rounded-full text-black font-semibold">
-              Human Resources
-            </span>
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gray-400 rounded-full"></div>
-              <span className="font-semibold">El Ouarzazi Aya</span>
-            </div>
-          </div>
-        </header>
-
         <Filters onFilterChange={handleFilterChange} />
-
         <section className="w-full flex justify-center mt-10">
           <div className="w-full max-w-none rounded-lg border border-gray-300 bg-white p-6 shadow-md">
             <table className="w-full border-collapse">
@@ -133,7 +133,7 @@ const AVLSpace: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {[{ id: "U30G25", name: "Christine Brooks", space: "TISAX 5", date: "14 Feb 2019", dept: "IT", status: "Present" }].map(({ id, name, space, date, dept, status }) => (
+                {filteredData.map(({ id, name, space, date, dept, status }) => (
                   <tr key={id} className="hover:bg-gray-50">
                     <td className="p-4 border-b text-center text-base">{id}</td>
                     <td className="p-4 border-b text-center text-base">{name}</td>
