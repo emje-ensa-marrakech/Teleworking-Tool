@@ -1,7 +1,6 @@
 // components/RoomCard.tsx
 import React, { useRef, useEffect } from "react";
-import { RoomData } from "../Map/type";
-
+import { RoomData } from "../collaborator/map/type";
 
 interface RoomCardProps {
   roomData: RoomData;
@@ -48,10 +47,16 @@ const RoomCard: React.FC<RoomCardProps> = ({
       <h3 className="text-xl font-bold">{roomData.name}</h3>
       <p className="my-2 text-gray-800">ID: {roomData.id}</p>
       <p className="my-2 text-gray-800">Department: {roomData.departement}</p>
-      <p className="my-2 text-gray-800">Status: {roomData.status ? "Available" : "Reserved"}</p>
-      <p className="my-2 text-gray-800">Available: {roomData.available || "N/A"}</p>
+      <p className="my-2 text-gray-800">
+        Status: {roomData.status ? "Available" : "Reserved"}
+      </p>
+      <p className="my-2 text-gray-800">
+        Available: {roomData.available || "N/A"}
+      </p>
       <p className="my-2 text-gray-800">Floor: {roomData.floor || "N/A"}</p>
-      <p className="my-2 text-gray-800">Capacity: {roomData.capacity || "N/A"}</p>
+      <p className="my-2 text-gray-800">
+        Capacity: {roomData.capacity || "N/A"}
+      </p>
       <p className="my-2 text-gray-800">Expired: {roomData.expired || "N/A"}</p>
       <button
         className="bg-red-500 text-white px-3 py-2 rounded-lg cursor-pointer mt-3"
@@ -59,7 +64,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
       >
         Close
       </button>
-      {permission && (roomData.status === true ) && (
+      {permission && roomData.status === true && (
         <button
           className="bg-blue-500 text-white px-3 py-2 rounded-lg cursor-pointer mt-4 ml-1"
           onClick={handleReserveRelease} // Reserve/Release and close the card

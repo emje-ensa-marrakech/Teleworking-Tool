@@ -62,7 +62,7 @@ export async function POST(req: Request) {
     } catch (error: unknown) {
 
         // making an output depending on the user type
-        if (error.code === 'P2002') {
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
             return NextResponse.json({
                 status: "error",
                 message: 'Unique constraint violation: A user with this email already exists.'

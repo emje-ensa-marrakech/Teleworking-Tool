@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import Card from "./card";
 import IdCard from "./card_id";
 
+import { Home, Calendar, Settings, Bell, Map, FileUser } from "lucide-react";
+import Link from "next/link";
+
 interface Reservation {
   [x: string]: any;
   id: number;
@@ -97,47 +100,60 @@ export default function Reservations() {
     <div className="booking">
       <div className="container">
         <div className="nav2">
-          <div className="logo2">
-            <img src="./booking/image-removebg-preview 4.png" alt="" />
+          <div className="logo2 ">
+            <img src="../../booking/image-removebg-preview 4.png" alt="" />
           </div>
-          <div className="conent">
-            <a href="#">
-              <div className="li">
-                <img src="./booking/home.png" alt="" />
-                <h6>Home</h6>
+          <nav className="flex flex-col flex-grow space-y-4">
+            <Link
+              href="/RH/home"
+              className="flex flex-col items-center mt-18 space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
+            >
+              <Home size="48" />
+              <div>
+                <Link href="/analytics">Home</Link>
               </div>
-            </a>
-            <a href="#">
-              <div className="li">
-                <img src="./booking/map.png" alt="" />
-                <h6>Spaces</h6>
+            </Link>
+
+            <Link
+              href="/RH/spaces"
+              className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
+            >
+              <Map size="48" />
+              <div>Spaces</div>
+            </Link>
+
+            <Link
+              href="/RH/booking"
+              className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
+            >
+              <Calendar size="48" />
+              <div>Booking</div>
+            </Link>
+
+            <Link
+              href="/RH/collaborators"
+              className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
+            >
+              <FileUser size="48" />
+              <div>Collaborators</div>
+            </Link>
+
+            <Link
+              href="/RH/settings"
+              className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black mt-auto"
+            >
+              <Settings size="48" />
+              <div className="flex flex-col items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black mt-auto">
+                Settings
               </div>
-            </a>
-            <a href="#">
-              <div className="li">
-                <img src="./booking/calendar.png" alt="" />
-                <h6>Booking</h6>
-              </div>
-            </a>
-            <a href="#">
-              <div className="li">
-                <img src="./booking/person.png" alt="" />
-                <h6>Collaborators</h6>
-              </div>
-            </a>
-          </div>
-          <a href="#">
-            <div className="li">
-              <img src="./booking/settings.png" alt="" />
-              <h6>Settings</h6>
-            </div>
-          </a>
+            </Link>
+          </nav>
         </div>
 
         <div className="nav1">
           <div className="logo">
             <img
-              src="./booking/image-removebg-preview 2.jpg"
+              src="../../booking/image-removebg-preview 2.jpg"
               alt="Logo"
               className="logoimg"
             />

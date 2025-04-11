@@ -78,10 +78,12 @@ export default function Dashboard() {
           <div className="flex items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black">
             <Link href="/analytics">Home</Link>
           </div>
-          <Calendar size="48" />
-          <div className="flex items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black">
-            <Link href="/analytics">Reservations</Link>
-          </div>
+          <Link href="/RH/reservation">
+            <Calendar size="48" />
+            <div className="flex items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black">
+              Reservations
+            </div>
+          </Link>
           <div className="flex-1"></div>
           <Settings size="48" />
           <div className="flex items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black mt-auto">
