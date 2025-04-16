@@ -84,7 +84,7 @@ export default function Dashboard() {
           >
             <Home size="48" />
             <div>
-              <Link href="/analytics">Home</Link>
+              <Link href="#">Home</Link>
             </div>
           </Link>
 
