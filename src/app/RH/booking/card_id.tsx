@@ -1,7 +1,7 @@
-"use client";
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+'use client';
+import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface IdCardProps {
   id: number;
@@ -13,22 +13,28 @@ interface IdCardProps {
   onClose: () => void;
 }
 
-const IdCard: React.FC<IdCardProps> = ({ id, jobTitle, name, team, imageSrc, visible, onClose }) => {
+const IdCard: React.FC<IdCardProps> = ({
+  id,
+  jobTitle,
+  name,
+  team,
+  imageSrc,
+  visible,
+  onClose,
+}) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
 
   if (!visible) return null;
 
-  
   const handleDateChange = (date: Date | null) => {
     if (!date) return;
 
     setSelectedDates((prevDates) => {
       const exists = prevDates.some((d) => d.getTime() === date.getTime());
-
       return exists
-        ? prevDates.filter((d) => d.getTime() !== date.getTime()) 
-        : [...prevDates, date]; 
+        ? prevDates.filter((d) => d.getTime() !== date.getTime())
+        : [...prevDates, date];
     });
   };
 
@@ -47,32 +53,30 @@ const IdCard: React.FC<IdCardProps> = ({ id, jobTitle, name, team, imageSrc, vis
           <p className="text-gray-600">{jobTitle}</p>
           <p className="text-gray-500">{team}</p>
 
-          {/* Icône du calendrier */}
           <button
             className="mt-4 flex items-center space-x-2"
             onClick={() => setShowCalendar(!showCalendar)}
           >
             <img
-              src="./booking/calendar.png"
+              src="/booking/calendar.png"
               alt="Calendar"
               className="w-8 h-8 cursor-pointer"
-              style={{ filter: "invert(1)" }}
+              style={{ filter: 'invert(1)' }}
             />
             <span className="text-gray-600">
               {selectedDates.length > 0
-                ? selectedDates.map((date) => date.toDateString()).join(", ")
-                : "Select dates"}
+                ? selectedDates.map((date) => date.toDateString()).join(', ')
+                : 'Select dates'}
             </span>
           </button>
 
-          {/* Affichage du calendrier */}
           {showCalendar && (
             <div className="mt-2 bg-white p-2 shadow-lg rounded-lg">
               <DatePicker
-                selected={null} 
+                selected={null}
                 onChange={handleDateChange}
                 inline
-                highlightDates={selectedDates} 
+                highlightDates={selectedDates}
               />
             </div>
           )}

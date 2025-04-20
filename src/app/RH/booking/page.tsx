@@ -2,21 +2,27 @@
 import { useEffect, useState } from "react";
 import Card from "./card";
 import IdCard from "./card_id";
-
 import { Home, Calendar, Settings, Bell, Map, FileUser } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+
+interface User {
+  userId: string;
+  name: string;
+  department: string;
+  type: string;
+}
+
+interface Workspace {
+  name: string;
+}
 
 interface Reservation {
-  [x: string]: any;
   id: number;
-  title: string;
-  department: string;
-  team: string;
-  author: string;
-  date: string;
-  jobTitle: string;
-  name: string;
-  imageSrc: string;
+  time: string;
+  confirmed: boolean;
+  user: User;
+  workspace: Workspace;
 }
 
 export default function Reservations() {
@@ -24,22 +30,19 @@ export default function Reservations() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedReservation, setSelectedReservation] =
-    useState<Reservation | null>(null);
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
 
   useEffect(() => {
     const fetchReservations = async () => {
       try {
         const response = await fetch("/api/TLorTLS/get-all-reservations");
-        const data = await response.json();
-
-        if (data.status === "success") {
-          setReservations(data.reservations);
-        } else {
-          setError(data.message);
+        if (!response.ok) {
+          throw new Error("Failed to fetch reservations");
         }
+        const data = await response.json();
+        setReservations(data.reservations || []);
       } catch (err) {
-        setError("Failed to fetch reservations");
+        setError(err instanceof Error ? err.message : "Failed to fetch reservations");
       } finally {
         setLoading(false);
       }
@@ -63,13 +66,9 @@ export default function Reservations() {
       }
 
       const data = await response.json();
-
-      // Update state with new confirmation status
       setReservations((prev) =>
         prev.map((res) =>
-          res.id === id
-            ? { ...res, confirmed: data.reservation.confirmed }
-            : res
+          res.id === id ? { ...res, confirmed: data.reservation.confirmed } : res
         )
       );
     } catch (error) {
@@ -77,7 +76,6 @@ export default function Reservations() {
     }
   };
 
-  // Filter reservations based on search query
   const filteredReservations = reservations.filter(
     (res) =>
       res.workspace.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -87,145 +85,150 @@ export default function Reservations() {
 
   const totalReservations = filteredReservations.length;
 
-  if (loading)
+  if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="border-t-4 border-green-500 border-solid rounded-full w-16 h-16 animate-spin"></div>
         <p className="ml-4 text-xl font-semibold text-green-700">Loading...</p>
       </div>
     );
-  if (error) return <p>Error: {error}</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500 p-4">Error: {error}</p>;
+  }
 
   return (
-    <div className="booking">
-      <div className="container">
-        <div className="nav2">
-          <div className="logo2 ">
-            <img src="../../booking/image-removebg-preview 4.png" alt="" />
-          </div>
-          <nav className="flex flex-col flex-grow space-y-4">
-            <Link
-              href="/RH/home"
-              className="flex flex-col items-center mt-18 space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
-            >
-              <Home size="48" />
-              <div>
-                <Link href="/analytics">Home</Link>
-              </div>
-            </Link>
-
-            <Link
-              href="/RH/spaces"
-              className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
-            >
-              <Map size="48" />
-              <div>Spaces</div>
-            </Link>
-
-            <Link
-              href="/RH/booking"
-              className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
-            >
-              <Calendar size="48" />
-              <div>Booking</div>
-            </Link>
-
-            <Link
-              href="/RH/collaborators"
-              className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
-            >
-              <FileUser size="48" />
-              <div>Collaborators</div>
-            </Link>
-
-            <Link
-              href="/RH/settings"
-              className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black mt-auto"
-            >
-              <Settings size="48" />
-              <div className="flex flex-col items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black mt-auto">
-                Settings
-              </div>
-            </Link>
-          </nav>
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-gradient-to-b from-green-500 to-blue-500 text-white p-4">
+        <div className="flex justify-center mb-8">
+        <img src="../../booking/image-removebg-preview 4.png" alt="company logo" />
         </div>
+        <nav className="space-y-4">
+          <Link
+            href="/RH/home"
+            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
+          >
+            <Home size={24} />
+            <span>Home</span>
+          </Link>
+          <Link
+            href="/RH/spaces"
+            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
+          >
+            <Map size={24} />
+            <span>Spaces</span>
+          </Link>
+          <Link
+            href="/RH/booking"
+            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
+          >
+            <Calendar size={24} />
+            <span>Booking</span>
+          </Link>
+          <Link
+            href="/RH/collaborators"
+            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
+          >
+            <FileUser size={24} />
+            <span>Collaborators</span>
+          </Link>
+          <Link
+            href="/RH/settings"
+            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors mt-auto"
+          >
+            <Settings size={24} />
+            <span>Settings</span>
+          </Link>
+        </nav>
+      </aside>
 
-        <div className="nav1">
-          <div className="logo">
-            <img
-              src="../../booking/image-removebg-preview 2.jpg"
-              alt="Logo"
-              className="logoimg"
-            />
-          </div>
-          <div className="content">
-            <button className="human-ressources">Human Resources</button>
-            <i className="fa-regular fa-bell notification-icon"></i>
-            <div className="avatar">O</div>
-            <h1 className="username">Oumnia</h1>
-          </div>
-        </div>
-      </div>
+      {/* Main Content */}
+      <main className="flex-1 p-6">
+        {/* Top Navigation */}
+        <header className="flex justify-between items-center mb-6 p-4 bg-white rounded-lg shadow">
+          <div className="flex items-center space-x-4">
+            <Image src="/logo.png" alt="Logo" width={180} height={38} priority />
 
-      <div className="filter">
-        <span className="title1">Booked spaces</span>
-        <span className="underline"></span>
-        <div className="search">
-          <span className="search-text">Search:</span>
-          <i className="fas fa-search"></i>
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-      </div>
-      <div className="container-card">
-        <div className="continer2">
-          <div className="cards">
-            {/* Dynamically display filtered cards */}
-            {filteredReservations.length > 0 ? (
-              filteredReservations.map((reservation) => (
-                <Card
-                  key={reservation.id}
-                  title={reservation.workspace.name}
-                  department={reservation.user.department}
-                  team={reservation.user.department}
-                  author={reservation.user.name}
-                  date={new Date(reservation.time).toISOString().split("T")[0]}
-                  onClick={() => setSelectedReservation(reservation)}
-                  onConfirmChange={handleConfirmChange}
-                  confirmed={reservation.confirmed}
-                  id={reservation.id}
-                />
-              ))
-            ) : (
-              <p className="text-center text-gray-500">
-                No reservations found.
-              </p>
-            )}
           </div>
-          <div className="spacesnbr">
-            <div className="booked-spaces">
-              Booked Spaces: {totalReservations}
+          
+          <div className="flex items-center space-x-4">
+            <button className="bg-green-600 text-white px-4 py-2 rounded">
+              Human Resources
+            </button>
+            <Bell size={24} className="text-gray-600" />
+            <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+              O
             </div>
-            <div className="available-spaces">
-              Available Spaces: {20 - totalReservations}
+          </div>
+        </header>
+
+        {/* Filter Section */}
+        <div className="bg-white p-4 rounded-lg shadow mb-6">
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl font-bold">Booked Spaces</h1>
+            <div className="relative">
+              <input
+                type="text"
+                className="pl-8 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <div className="absolute left-2 top-2.5 text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                </svg>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      {/* Display ID Card when a card is clicked */}
-      {selectedReservation && selectedReservation.user && (
+
+        {/* Cards Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+          {filteredReservations.length > 0 ? (
+            filteredReservations.map((reservation) => (
+              <Card
+                key={reservation.id}
+                title={reservation.workspace.name}
+                department={reservation.user.department}
+                team={reservation.user.department}
+                author={reservation.user.name}
+                date={new Date(reservation.time).toLocaleDateString()}
+                onClick={() => setSelectedReservation(reservation)}
+                onConfirmChange={handleConfirmChange}
+                confirmed={reservation.confirmed}
+                id={reservation.id}
+              />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-8 text-gray-500">
+              No reservations found matching your search.
+            </div>
+          )}
+        </div>
+
+        {/* Stats Section */}
+        <div className="bg-white p-4 rounded-lg shadow flex justify-between">
+          <div className="text-lg font-semibold">
+            Booked Spaces: <span className="text-blue-600">{totalReservations}</span>
+          </div>
+          <div className="text-lg font-semibold">
+            Available Spaces: <span className="text-green-600">{20 - totalReservations}</span>
+          </div>
+        </div>
+      </main>
+
+      {/* ID Card Modal */}
+      {selectedReservation && (
         <IdCard
-          id={selectedReservation.user.userId}
+          id={parseInt(selectedReservation.user.userId) || 0}
           jobTitle={selectedReservation.user.type || "N/A"}
           name={selectedReservation.user.name || "Unknown"}
           team={selectedReservation.user.department || "No Department"}
-          imageSrc={"booking/imgpro.jpg"}
-          visible={!!selectedReservation}
+          imageSrc="/booking/imgpro.jpg"
+          visible={true}
           onClose={() => setSelectedReservation(null)}
         />
       )}

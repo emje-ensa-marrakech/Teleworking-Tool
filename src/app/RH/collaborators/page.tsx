@@ -1,65 +1,66 @@
-import { Home, Calendar, Settings, Bell, Map, FileUser } from "lucide-react";
+import { Home, Calendar, Settings, Map, FileUser } from "lucide-react";
 import Link from "next/link";
-
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default async function CollaboratorsPage() {
   const collaborators = await prisma.user.findMany({
     where: { type: "collaborateur" },
+    include: {
+      Reservation: {
+        select: {
+          id: true,
+        },
+      },
+    },
   });
 
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      
       <aside className="w-64 bg-gradient-to-b from-green-400 to-blue-500 text-white flex flex-col justify-between">
-      <div className="flex items-center justify-center h-16">
-        <img src="../../booking/image-removebg-preview 4.png" alt="" />
-      </div>
+        <div className="flex items-center justify-center h-16">
+          <img src="../../booking/image-removebg-preview 4.png" alt="" />
+        </div>
         <nav className="flex flex-col mt-16 flex-grow space-y-4">
           <Link
             href="/RH/home"
-            className="flex flex-col items-center mt-18 space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
+            className="flex flex-col items-center space-y-2 p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
           >
-            <Home size="48" />
-            <div>
-              <Link href="/analytics">Home</Link>
-            </div>
+            <Home size={24} />
+            <span>Home</span>
           </Link>
 
           <Link
             href="/RH/spaces"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
+            className="flex flex-col items-center space-y-2 p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
           >
-            <Map size="48" />
-            <div>Spaces</div>
+            <Map size={24} />
+            <span>Spaces</span>
           </Link>
 
           <Link
             href="/RH/booking"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
+            className="flex flex-col items-center space-y-2 p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
           >
-            <Calendar size="48" />
-            <div>Booking</div>
+            <Calendar size={24} />
+            <span>Booking</span>
           </Link>
 
           <Link
-            href="/RH/collaborator"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
+            href="/RH/collaborators"
+            className="flex flex-col items-center space-y-2 p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
           >
-            <FileUser size="48" />
-            <div>Collaborators</div>
+            <FileUser size={24} />
+            <span>Collaborators</span>
           </Link>
 
           <Link
             href="/RH/settings"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black mt-auto"
+            className="flex flex-col items-center space-y-2 p-2 rounded-lg hover:bg-white hover:text-black transition-colors mt-auto"
           >
-            <Settings size="48" />
-            <div className="flex flex-col items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black mt-auto">
-              Settings
-            </div>
+            <Settings size={24} />
+            <span>Settings</span>
           </Link>
         </nav>
       </aside>
@@ -68,31 +69,35 @@ export default async function CollaboratorsPage() {
       <main className="flex-1 p-10 bg-gray-100">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Collaborators</h1>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+          <Link
+            href="/RH/collaborators/add"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          >
             + Add Collaborator
-          </button>
+          </Link>
         </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white shadow-md rounded-lg">
+
+        <div className="overflow-x-auto bg-white rounded-lg shadow">
+          <table className="min-w-full">
             <thead className="bg-gray-200">
               <tr>
-                <th className="text-left p-4">Name</th>
-                <th className="text-left p-4">Email</th>
-                <th className="text-left p-4">Gender</th>
-                <th className="text-left p-4">Department</th>
-                <th className="text-left p-4">Work Hours</th>
-                <th className="text-left p-4">Reservations</th>
+                <th className="text-left p-4 font-medium">Name</th>
+                <th className="text-left p-4 font-medium">Email</th>
+                <th className="text-left p-4 font-medium">Gender</th>
+                <th className="text-left p-4 font-medium">Department</th>
+                <th className="text-left p-4 font-medium">Work Hours</th>
+                <th className="text-left p-4 font-medium">Reservations</th>
               </tr>
             </thead>
             <tbody>
               {collaborators.map((user) => (
                 <tr key={user.id} className="border-t hover:bg-gray-50">
-                  <td className="p-4">{user.name}</td>
-                  <td className="p-4">{user.email}</td>
-                  <td className="p-4">{user.gender}</td>
-                  <td className="p-4">{user.department}</td>
-                  <td className="p-4">{user.workshours}</td>
-                  <td className="p-4">{user.Reservation?.length ?? 0}</td>
+                  <td className="p-4">{user.name || "-"}</td>
+                  <td className="p-4">{user.email || "-"}</td>
+                  <td className="p-4">{user.gender || "-"}</td>
+                  <td className="p-4">{user.department || "-"}</td>
+                  <td className="p-4">{user.workshours || "-"}</td>
+                  <td className="p-4">{user.Reservation?.length || 0}</td>
                 </tr>
               ))}
             </tbody>

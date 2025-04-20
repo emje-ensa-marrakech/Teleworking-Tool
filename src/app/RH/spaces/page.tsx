@@ -4,51 +4,67 @@ import { SetStateAction, useState } from "react";
 import { Home, Calendar, Settings, Bell, Map, FileUser } from "lucide-react";
 import Link from "next/link";
 
+interface Space {
+  id: number;
+  name: string;
+  department: string;
+  floors: number;
+}
+
+interface NewSpace {
+  name: string;
+  department: string;
+  floors: string;
+}
+
 export default function AVLSpace() {
   const [showAddSpace, setShowAddSpace] = useState(false);
-  const [spaces, setSpaces] = useState([
+  const [spaces, setSpaces] = useState<Space[]>([
     { id: 1, name: "Conference Room", department: "IT", floors: 1 },
     { id: 2, name: "IT Room 2", department: "HR", floors: 2 },
     { id: 3, name: "TISAX 5", department: "Sales", floors: 1 },
   ]);
-  const [newSpace, setNewSpace] = useState({
+  const [newSpace, setNewSpace] = useState<NewSpace>({
     name: "",
     department: "",
     floors: "",
   });
-  const [editingId, setEditingId] = useState(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
-  const handleAddSpace = (e: { preventDefault: () => void; }) => {
+  const handleAddSpace = (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingId) {
+    if (editingId !== null) {
       setSpaces(
         spaces.map((space) =>
           space.id === editingId
             ? { ...newSpace, id: editingId, floors: Number(newSpace.floors) }
             : space
-        )
+        ) as Space[]
       );
       setEditingId(null);
     } else {
       setSpaces([
         ...spaces,
         { ...newSpace, id: Date.now(), floors: Number(newSpace.floors) },
-      ]);
+      ] as Space[]);
     }
     setNewSpace({ name: "", department: "", floors: "" });
     setShowAddSpace(false);
   };
 
-  const modifySpace = (id: number | SetStateAction<null>) => {
+  const modifySpace = (id: number) => {
     const spaceToEdit = spaces.find((space) => space.id === id);
     if (spaceToEdit) {
-      setNewSpace({ ...spaceToEdit, floors: spaceToEdit.floors.toString() });
+      setNewSpace({
+        ...spaceToEdit,
+        floors: spaceToEdit.floors.toString(),
+      });
     }
     setEditingId(id);
     setShowAddSpace(true);
   };
 
-  const deleteSpace = (id) => {
+  const deleteSpace = (id: number) => {
     setSpaces(spaces.filter((space) => space.id !== id));
   };
 
@@ -59,47 +75,43 @@ export default function AVLSpace() {
         <nav className="flex flex-col flex-grow space-y-4">
           <Link
             href="/RH/home"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
-            <Home size="48" />
-            <div>
-              <Link href="/analytics">Home</Link>
-            </div>
+            <Home size={24} />
+            <span>Home</span>
           </Link>
 
           <Link
             href="/RH/spaces"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
-            <Map size="48" />
-            <div>Spaces</div>
+            <Map size={24} />
+            <span>Spaces</span>
           </Link>
 
           <Link
             href="/RH/booking"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
-            <Calendar size="48" />
-            <div>Booking</div>
+            <Calendar size={24} />
+            <span>Booking</span>
           </Link>
 
           <Link
             href="/RH/collaborators"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
-            <FileUser size="48" />
-            <div>Collaborators</div>
+            <FileUser size={24} />
+            <span>Collaborators</span>
           </Link>
 
           <div className="flex-1"></div>
           <Link
             href="/RH/settings"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black mt-auto"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2 mt-auto"
           >
-            <Settings size="48" />
-            <div className="flex flex-col items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black mt-auto">
-              Settings
-            </div>
+            <Settings size={24} />
+            <span>Settings</span>
           </Link>
         </nav>
       </aside>
@@ -136,6 +148,7 @@ export default function AVLSpace() {
                 onChange={(e) =>
                   setNewSpace({ ...newSpace, name: e.target.value })
                 }
+                required
               />
 
               <label className="font-bold">Department:</label>
@@ -146,6 +159,7 @@ export default function AVLSpace() {
                 onChange={(e) =>
                   setNewSpace({ ...newSpace, department: e.target.value })
                 }
+                required
               />
 
               <label className="font-bold">Floor:</label>
@@ -156,19 +170,21 @@ export default function AVLSpace() {
                 onChange={(e) =>
                   setNewSpace({ ...newSpace, floors: e.target.value })
                 }
+                required
+                min="1"
               />
 
               <button
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
               >
-                {editingId ? "Modify Space" : "Add Space"}
+                {editingId !== null ? "Modify Space" : "Add Space"}
               </button>
             </form>
           </div>
         )}
 
-        <section className="grid grid-cols-3 gap-4">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {spaces.map((space) => (
             <div key={space.id} className="bg-white p-4 rounded shadow">
               <h3 className="text-lg font-bold">{space.name}</h3>
@@ -176,13 +192,13 @@ export default function AVLSpace() {
               <p>Floors: {space.floors} floor(s)</p>
               <div className="flex justify-between mt-4">
                 <button
-                  className="text-purple-600 p-2 bg-gray-100"
+                  className="text-purple-600 p-2 bg-gray-100 rounded hover:bg-purple-100"
                   onClick={() => modifySpace(space.id)}
                 >
                   Modify
                 </button>
                 <button
-                  className="text-red-600 p-2 bg-gray-100"
+                  className="text-red-600 p-2 bg-gray-100 rounded hover:bg-red-100"
                   onClick={() => deleteSpace(space.id)}
                 >
                   Delete
