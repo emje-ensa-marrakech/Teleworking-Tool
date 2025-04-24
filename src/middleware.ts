@@ -16,10 +16,13 @@ export async function middleware(request: NextRequest) {
         const secret = new TextEncoder().encode(process.env.TOKEN)
         
         await jwtVerify(key, secret ,{ algorithms: ['HS256']}) // Verify token using `jose`
-    } catch (error) {
+    } catch (err) {
+        console.error('JWT verification failed:', err)
         return NextResponse.json(
+
             { success: false, message: 'authentication failed' },
             { status: 403 }
+
         )
     }
 }

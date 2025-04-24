@@ -1,0 +1,5 @@
+1- complete src\app\api\generale/getAllRooms  -->>> cllaborator UI spaces.
+2- complete all pages functionalities backend 
+3- i think that's it
+
+

@@ -30,7 +30,8 @@ export default function Reservations() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+  const [selectedReservation, setSelectedReservation] =
+    useState<Reservation | null>(null);
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -42,7 +43,9 @@ export default function Reservations() {
         const data = await response.json();
         setReservations(data.reservations || []);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch reservations");
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch reservations"
+        );
       } finally {
         setLoading(false);
       }
@@ -68,7 +71,9 @@ export default function Reservations() {
       const data = await response.json();
       setReservations((prev) =>
         prev.map((res) =>
-          res.id === id ? { ...res, confirmed: data.reservation.confirmed } : res
+          res.id === id
+            ? { ...res, confirmed: data.reservation.confirmed }
+            : res
         )
       );
     } catch (error) {
@@ -103,7 +108,13 @@ export default function Reservations() {
       {/* Sidebar */}
       <aside className="w-64 bg-gradient-to-b from-green-500 to-blue-500 text-white p-4">
         <div className="flex justify-center mb-8">
-        <img src="../../booking/image-removebg-preview 4.png" alt="company logo" />
+          <Image 
+          src="/booking/image-removebg-preview 4.png" 
+          alt="company logo"
+          
+          width={100}
+          height={100}
+          />
         </div>
         <nav className="space-y-4">
           <Link
@@ -149,10 +160,15 @@ export default function Reservations() {
         {/* Top Navigation */}
         <header className="flex justify-between items-center mb-6 p-4 bg-white rounded-lg shadow">
           <div className="flex items-center space-x-4">
-            <Image src="/logo.png" alt="Logo" width={180} height={38} priority />
-
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              width={180}
+              height={38}
+              priority
+            />
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <button className="bg-green-600 text-white px-4 py-2 rounded">
               Human Resources
@@ -177,8 +193,17 @@ export default function Reservations() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               <div className="absolute left-2 top-2.5 text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
             </div>
@@ -212,10 +237,12 @@ export default function Reservations() {
         {/* Stats Section */}
         <div className="bg-white p-4 rounded-lg shadow flex justify-between">
           <div className="text-lg font-semibold">
-            Booked Spaces: <span className="text-blue-600">{totalReservations}</span>
+            Booked Spaces:{" "}
+            <span className="text-blue-600">{totalReservations}</span>
           </div>
           <div className="text-lg font-semibold">
-            Available Spaces: <span className="text-green-600">{20 - totalReservations}</span>
+            Available Spaces:{" "}
+            <span className="text-green-600">{20 - totalReservations}</span>
           </div>
         </div>
       </main>

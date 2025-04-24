@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import Image from "next/image";
+
 interface IdCardProps {
   id: number;
   jobTitle: string;
@@ -12,7 +14,7 @@ interface IdCardProps {
   onClose: () => void;
 }
 
-const IdCard: React.FC<IdCardProps> = ({ id, jobTitle, name, team, imageSrc, visible, onClose }) => {
+const IdCard: React.FC<IdCardProps> = ({ jobTitle, name, team, imageSrc, visible, onClose }) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
 
@@ -40,7 +42,7 @@ const IdCard: React.FC<IdCardProps> = ({ id, jobTitle, name, team, imageSrc, vis
           &times;
         </button>
         <div className="flex flex-col items-center">
-          <img src={imageSrc} alt={name} className="w-20 h-20 rounded-full" />
+          <Image src={imageSrc} alt={name} className="w-20 h-20 rounded-full" />
           <h2 className="text-xl font-bold mt-4">{name}</h2>
           <p className="text-gray-600">{jobTitle}</p>
           <p className="text-gray-500">{team}</p>
@@ -49,7 +51,7 @@ const IdCard: React.FC<IdCardProps> = ({ id, jobTitle, name, team, imageSrc, vis
             className="mt-4 flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg"
             onClick={() => setShowCalendar(!showCalendar)}
           >
-            <img src="/calendar.png" alt="Calendar" className="w-6 h-6" />
+            <Image src="/calendar.png" alt="Calendar" className="w-6 h-6" />
             <span>Select Dates</span>
           </button>
 

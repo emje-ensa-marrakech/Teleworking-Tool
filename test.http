@@ -5,9 +5,9 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJvdWRhZHNhbWly
 {
     "name" : "Mouad",
     "gender" : "Mr",
-    "department" : "RH",
+    "department" : "IT",
     "personalNumber" : 123456789,
     "password" : "1234",
-    "type" : "RH",
-    "email" : "mouad_RH@gmail.com"
+    "type" : "TLorSTL",
+    "email" : "mouad_TL@gmail.com"
 }

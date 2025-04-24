@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Image from "next/image";
 
 interface FiltersState {
   date: string | null;
@@ -107,7 +108,7 @@ const AVLSpace: React.FC = () => {
   return (
     <div className="flex w-full bg-gray-100">
       <aside className="w-40 min-h-screen bg-gradient-to-b from-green-500 to-blue-500 p-5 text-white">
-        <img src="/avl.png" alt="AVL Logo" className="w-40 mx-auto mb-5" />
+        <Image src="/avl.png" alt="AVL Logo" className="w-40 mx-auto mb-5" />
         <nav>
           <ul className="space-y-5">
             {["Home", "Spaces", "Booking", "Collaborators", "Settings"].map((item) => (

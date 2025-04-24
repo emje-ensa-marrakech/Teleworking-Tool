@@ -1,41 +1,19 @@
-import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import argon from "argon2"
+import { NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
 
-export async function POST(req: NextRequest) {
-    const prisma = new PrismaClient()
-    const data = await req.json()
+const prisma = new PrismaClient();
 
-    if (data.RHid && data.collabName && data.collabEmail && data.collabPassword) {
-        const user =await prisma.user.findUnique({
-           where: {
-            id : Number(data.RHid)
-           }
-        })
+export async function GET() {
+  const collaborators = await prisma.user.findMany({
+    where: { type: 'collaborateur' },
+    include: { Reservation: true },
+  });
 
-      if (user){
-            if(user.type == "RH") {
-                let hashedPassword = await argon.hash(data.collabName)
+  return NextResponse.json(collaborators);
+}
 
-                const collab = await prisma.user.create(
-                    {
-                        data : {
-                            type : "collaborateur",
-                            name : data.collabName,
-                            password : hashedPassword,
-                            email: data.collabEmail
-                        }
-                    }
-                )
-            }
-            
-        }
-    } else {
-        return NextResponse.json(
-            {
-                "status" : "error",
-                "msg" : "invalid parametres"
-            }
-        )
-    }
+export async function POST(req: Request) {
+  const data = await req.json();
+  const newUser = await prisma.user.create({ data });
+  return NextResponse.json(newUser);
 }

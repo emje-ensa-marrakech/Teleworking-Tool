@@ -43,7 +43,7 @@ export default function SignInPage() {
             setLoading(false);
             if (data.type === "collaborateur") router.push("/collaborator/home");
             if (data.type === "RH") router.push("/RH/home");
-            if (data.type === "TL_STL") router.push("/manager/home");
+            if (data.type === "TLorSTL") router.push("/TL_STL/home");
         } else {
             setError(true);
             setLoading(false);

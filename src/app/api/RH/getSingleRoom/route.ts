@@ -16,11 +16,7 @@ export async function GET(req: NextRequest) {
 
         if (user) {
             if (user.type == "RH") {
-                const room = await prisma.workspace.findUnique({
-                    where: {
-                        id: data.roomId
-                    }
-                })
+                
 
                 const reservations = (await prisma.reservation.findMany(
                     {

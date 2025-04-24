@@ -22,44 +22,37 @@ export default async function CollaboratorsPage() {
         <div className="flex items-center justify-center h-16">
           <img src="../../booking/image-removebg-preview 4.png" alt="" />
         </div>
-        <nav className="flex flex-col mt-16 flex-grow space-y-4">
+        <nav className="flex flex-col flex-grow space-y-4">
           <Link
-            href="/RH/home"
-            className="flex flex-col items-center space-y-2 p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
+            href="/TL_STL/home"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
-            <Home size={24} />
+            <Home size="24" />
             <span>Home</span>
           </Link>
 
           <Link
-            href="/RH/spaces"
-            className="flex flex-col items-center space-y-2 p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
+            href="/TL_STL/spaces"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
-            <Map size={24} />
+            <Map size="24" />
             <span>Spaces</span>
           </Link>
 
           <Link
-            href="/RH/booking"
-            className="flex flex-col items-center space-y-2 p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
+            href="/TL_STL/collaborators"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
-            <Calendar size={24} />
-            <span>Booking</span>
-          </Link>
-
-          <Link
-            href="/RH/collaborators"
-            className="flex flex-col items-center space-y-2 p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
-          >
-            <FileUser size={24} />
+            <FileUser size="24" />
             <span>Collaborators</span>
           </Link>
 
+          <div className="flex-1"></div>
           <Link
-            href="/RH/settings"
-            className="flex flex-col items-center space-y-2 p-2 rounded-lg hover:bg-white hover:text-black transition-colors mt-auto"
+            href="/TL_STL/settings"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2 mt-auto"
           >
-            <Settings size={24} />
+            <Settings size="24" />
             <span>Settings</span>
           </Link>
         </nav>

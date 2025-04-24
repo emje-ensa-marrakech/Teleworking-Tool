@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import argon from "argon2"
 import jwt from "jsonwebtoken"
 import { NextResponse } from "next/server";
-import { emit } from "process";
 
 export async function POST(req: Request) {
     const prisma = new PrismaClient()

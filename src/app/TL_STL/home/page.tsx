@@ -12,10 +12,20 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import Image from "next/image";
 
-import { Home, Calendar, Settings, Bell } from "lucide-react";
+import { Home, Calendar, Settings, Bell, Map, FileUser } from "lucide-react";
 
-const attendanceData = [
+interface ChartData {
+  name: string;
+  value: number;
+}
+
+type SpaceOccupancyData = ChartData;
+type ReservationPerMonthData = ChartData;
+type ReservationPerServiceData = ChartData;
+
+const attendanceData: ChartData[] = [
   { name: "Present", value: 36.2 },
   { name: "Missed Attendance", value: 63.8 },
 ];
@@ -24,11 +34,16 @@ export default function Dashboard() {
   const [userName, setUserName] = useState("Abdelghani Bensalih");
   const [isClient, setIsClient] = useState(false);
 
-  const [spaceOccupancyRate, setSpaceOccupancyRate] = useState([]);
-  const [reservationPerMonth, setReservationPerMonth] = useState([]);
-  const [reservationPerService, setReservationPerService] = useState<
-    { name: string; value: number }[]
+  const [spaceOccupancyRate, setSpaceOccupancyRate] = useState<
+    SpaceOccupancyData[]
   >([]);
+  const [reservationPerMonth, setReservationPerMonth] = useState<
+    ReservationPerMonthData[]
+  >([]);
+  const [reservationPerService, setReservationPerService] = useState<
+    ReservationPerServiceData[]
+  >([]);
+
   const colors = ["#38a3a5", "#02c39a", "#4AA659", "#1e5c28", "#FF5733"];
 
   const totalReservations = reservationPerService.reduce(
@@ -39,8 +54,8 @@ export default function Dashboard() {
   useEffect(() => {
     fetch("/api/TLorTLS/reservation-rate-by-service")
       .then((res) => res.json())
-      .then((reservationPerService) => {
-        setReservationPerService(reservationPerService);
+      .then((data: ReservationPerServiceData[]) => {
+        setReservationPerService(data);
       })
       .catch((err) => console.error("Error fetching data:", err));
   }, []);
@@ -48,8 +63,8 @@ export default function Dashboard() {
   useEffect(() => {
     fetch("/api/TLorTLS/reservation-per-month")
       .then((res) => res.json())
-      .then((reservationPerMonth) => {
-        setReservationPerMonth(reservationPerMonth);
+      .then((data: ReservationPerMonthData[]) => {
+        setReservationPerMonth(data);
       })
       .catch((err) => console.error("Error fetching data:", err));
   }, []);
@@ -61,9 +76,9 @@ export default function Dashboard() {
   useEffect(() => {
     fetch("/api/TLorTLS/space-occupancy-rate")
       .then((res) => res.json())
-      .then((spaceOccupancyRate) => {
-        setSpaceOccupancyRate(spaceOccupancyRate);
-        console.log(spaceOccupancyRate);
+      .then((data: SpaceOccupancyData[]) => {
+        setSpaceOccupancyRate(data);
+        console.log(data);
       })
       .catch((err) => console.error("Error fetching data:", err));
   }, []);
@@ -72,23 +87,46 @@ export default function Dashboard() {
     <div className="flex flex-col md:flex-row h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-full md:w-[164px] bg-gradient-to-b from-green-500 to-blue-500 p-5 text-white flex flex-col">
-        <img src="avl.png" alt="User" className="w-28 h-14 rounded-lg" />
+        <Image
+          width={100}
+          height={100}
+          src="/avl.png"
+          alt="User"
+          className="w-28 h-14 rounded-lg mb-16"
+        />
         <nav className="flex flex-col flex-grow space-y-4">
-          <Home className="mt-10 " size="48" />
-          <div className="flex items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black">
-            <Link href="/analytics">Home</Link>
-          </div>
-          <Link href="/RH/reservation">
-            <Calendar size="48" />
-            <div className="flex items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black">
-              Reservations
-            </div>
+          <Link
+            href="/TL_Stl/home"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
+          >
+            <Home size="24" />
+            <span>Home</span>
           </Link>
+
+          <Link
+            href="/TL_STL/spaces"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
+          >
+            <Map size="24" />
+            <span>Spaces</span>
+          </Link>
+
+          <Link
+            href="/TL_STL/collaborators"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
+          >
+            <FileUser size="24" />
+            <span>Collaborators</span>
+          </Link>
+
           <div className="flex-1"></div>
-          <Settings size="48" />
-          <div className="flex items-center space-x-3  rounded-lg cursor-pointer hover:bg-white hover:text-black mt-auto">
-            <Link href="/analytics">Settings</Link>
-          </div>
+          <Link
+            href="/RH/settings"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2 mt-auto"
+          >
+            <Settings size="24" />
+            <span>Settings</span>
+          </Link>
         </nav>
       </aside>
 
@@ -96,13 +134,18 @@ export default function Dashboard() {
       <main className="flex-1 overflow-y-auto">
         {/* Top Bar */}
         <div className="flex flex-col p-5 md:flex-row bg-white justify-between items-center mb-3 shadow-lg">
-          <img src="logo.png" alt="User" className="w-20 h-25 rounded-2" />
+          <Image
+            width={100}
+            height={100}
+            src="/logo.png"
+            alt="User"
+            className="w-20 h-25 rounded-2"
+          />
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             <div className="bg-gradient-to-r from-[rgba(69,168,72,0.5)] to-[rgba(1,166,187,0.5)] font-bold text-black px-8 py-2 rounded-xl">
-              TL / STL
+              Human Resources
             </div>
-            <Bell className="text-gray-700 " />
-
+            <Bell className="text-gray-700" />
             <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">
               {userName.charAt(0).toUpperCase()}
             </div>
@@ -112,6 +155,7 @@ export default function Dashboard() {
 
         {/* Page Title */}
         <h3 className="text-2xl m-2 font-semibold">Welcome {userName} 👋</h3>
+
         {/* Welcome Message */}
         <div className="flex flex-col md:flex-row justify-between items-center mx-4 mb-5">
           <div>
@@ -132,7 +176,6 @@ export default function Dashboard() {
               <option>Last Week</option>
               <option>Last Month</option>
             </select>
-            {/* Export Charts */}
           </div>
           <button className="bg-blue-500 text-white px-4 py-2 rounded-lg ml-10">
             Export report
@@ -142,7 +185,7 @@ export default function Dashboard() {
         {/* Dashboard Cards */}
         <div className="grid mx-6 grid-cols-1 md:grid-cols-3 gap-3">
           <div className="bg-white p-4 rounded-lg shadow">
-            <h4 className="text-gray-500">Today's Attendance Rate</h4>
+            <h4 className="text-gray-500">Today is Attendance Rate</h4>
             <p className="text-2xl font-bold">36.2%</p>
           </div>
           <div className="bg-white p-4 rounded-lg shadow">
@@ -157,6 +200,7 @@ export default function Dashboard() {
 
         {/* Charts Section */}
         <div className="grid mx-6 grid-cols-1 xl:grid-cols-2 gap-3 mt-3">
+          {/* Attendance Tracking */}
           <div className="bg-white p-4 rounded-lg shadow">
             <h4 className="text-gray-500">Attendance Tracking</h4>
             <hr className="w-1/2 border-gray-400" />
@@ -184,9 +228,9 @@ export default function Dashboard() {
             )}
           </div>
 
+          {/* Reservation per Month */}
           <div className="bg-white p-2 rounded-lg shadow">
             <h4 className="text-gray-500">Reservation per Month</h4>
-
             {isClient && (
               <BarChart
                 width={500}
@@ -202,6 +246,7 @@ export default function Dashboard() {
             )}
           </div>
 
+          {/* Reservation Rate by Service */}
           <div className="bg-white p-4 rounded-lg shadow">
             <h4 className="text-gray-500">Reservation Rate by Service</h4>
             <hr className="w-1/2 border-gray-400" />
@@ -214,7 +259,9 @@ export default function Dashboard() {
                   cy="50%"
                   innerRadius={60}
                   outerRadius={100}
-                  label={({ value }) => `${(value / totalReservations) * 100}%`}
+                  label={({ value }) =>
+                    `${Math.round((value / totalReservations) * 100)}%`
+                  }
                 >
                   {reservationPerService.map((entry, index) => (
                     <Cell
@@ -229,6 +276,7 @@ export default function Dashboard() {
             )}
           </div>
 
+          {/* Space Occupancy Rate */}
           <div className="bg-white p-4 rounded-lg shadow">
             <h4 className="text-gray-500">Space Occupancy Rate</h4>
             {isClient && (

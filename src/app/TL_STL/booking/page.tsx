@@ -5,6 +5,8 @@ import "tailwindcss/tailwind.css";
 import Card from "./test2/card";
 import IdCard from "./test2/IdCard";
 
+import Image from "next/image";
+
 const cardData = [
   {
     id: 101,
@@ -46,7 +48,7 @@ const Page: React.FC = () => {
     <div className="relative w-screen h-screen">
       {/* Sidebar */}
       <div className="absolute top-0 left-0 w-[149px] h-screen bg-gradient-to-b from-green-600 to-cyan-600 z-10 flex flex-col items-center">
-        <img
+        <Image
           src="/acdff8367aec6e42b2edc5e13ceb96de.png"
           alt="Logo"
           className="w-[101px] h-[47px] border border-white mt-12"
@@ -57,13 +59,13 @@ const Page: React.FC = () => {
             onClick={() => router.push("/home")}
             className="flex flex-col items-center"
           >
-            <img src="/home.png" alt="Home" className="w-10 h-10" />
+            <Image src="/home.png" alt="Home" className="w-10 h-10" />
             <span className="text-white text-sm font-medium mt-1">Home</span>
           </button>
 
           {/* Booking Button (Reste sur la page actuelle) */}
           <button className="flex flex-col items-center">
-            <img src="/calendar.png" alt="Booking" className="w-10 h-10" />
+            <Image src="/calendar.png" alt="Booking" className="w-10 h-10" />
             <span className="text-white text-sm font-medium mt-1">Booking</span>
           </button>
         </div>
@@ -71,7 +73,7 @@ const Page: React.FC = () => {
 
       {/* Top Navigation */}
       <div className="absolute top-0 left-[149px] w-full h-[110px] bg-white flex items-center justify-between px-10 shadow-md">
-        <img
+        <Image
           src="/e0c95322b9cf37d94426349c6b9126d4.png"
           alt="Logo"
           className="w-[180px] h-[90px]"
@@ -80,8 +82,8 @@ const Page: React.FC = () => {
           <div className="w-[185px] h-[47px] rounded-[20px] bg-gradient-to-r from-green-500/50 to-cyan-500/50 flex justify-center items-center text-lg font-semibold text-black">
             TL/STL
           </div>
-          <img src="/notifications.png" className="w-7 h-7" alt="Notifications" />
-          <img src="/ellipse-1.png" className="w-12 h-12 rounded-full" alt="Avatar" />
+          <Image src="/notifications.png" className="w-7 h-7" alt="Notifications" />
+          <Image src="/ellipse-1.png" className="w-12 h-12 rounded-full" alt="Avatar" />
           <h1 className="text-lg font-semibold">Yasmina Bouchra</h1>
         </div>
       </div>

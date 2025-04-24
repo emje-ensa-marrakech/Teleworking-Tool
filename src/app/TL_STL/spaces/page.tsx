@@ -74,7 +74,7 @@ export default function AVLSpace() {
         <div className="text-2xl font-bold text-center mb-6">AVL SPACE</div>
         <nav className="flex flex-col flex-grow space-y-4">
           <Link
-            href="/RH/home"
+            href="/TL_STL/home"
             className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
             <Home size={24} />
@@ -82,23 +82,17 @@ export default function AVLSpace() {
           </Link>
 
           <Link
-            href="/RH/spaces"
+            href="/TL_STL/spaces"
             className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
             <Map size={24} />
             <span>Spaces</span>
           </Link>
 
-          <Link
-            href="/RH/booking"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
-          >
-            <Calendar size={24} />
-            <span>Booking</span>
-          </Link>
+         
 
           <Link
-            href="/RH/collaborators"
+            href="/TL_STL/collaborators"
             className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
             <FileUser size={24} />

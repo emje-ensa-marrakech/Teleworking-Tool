@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import Image from "next/image";
 
 import { Home, Calendar, Settings, Bell, Map, FileUser } from "lucide-react";
 
@@ -20,9 +21,9 @@ interface ChartData {
   value: number;
 }
 
-interface SpaceOccupancyData extends ChartData {}
-interface ReservationPerMonthData extends ChartData {}
-interface ReservationPerServiceData extends ChartData {}
+type SpaceOccupancyData = ChartData;
+type ReservationPerMonthData = ChartData;
+type ReservationPerServiceData = ChartData;
 
 const attendanceData: ChartData[] = [
   { name: "Present", value: 36.2 },
@@ -33,10 +34,16 @@ export default function Dashboard() {
   const [userName, setUserName] = useState("Abdelghani Bensalih");
   const [isClient, setIsClient] = useState(false);
 
-  const [spaceOccupancyRate, setSpaceOccupancyRate] = useState<SpaceOccupancyData[]>([]);
-  const [reservationPerMonth, setReservationPerMonth] = useState<ReservationPerMonthData[]>([]);
-  const [reservationPerService, setReservationPerService] = useState<ReservationPerServiceData[]>([]);
-  
+  const [spaceOccupancyRate, setSpaceOccupancyRate] = useState<
+    SpaceOccupancyData[]
+  >([]);
+  const [reservationPerMonth, setReservationPerMonth] = useState<
+    ReservationPerMonthData[]
+  >([]);
+  const [reservationPerService, setReservationPerService] = useState<
+    ReservationPerServiceData[]
+  >([]);
+
   const colors = ["#38a3a5", "#02c39a", "#4AA659", "#1e5c28", "#FF5733"];
 
   const totalReservations = reservationPerService.reduce(
@@ -80,8 +87,10 @@ export default function Dashboard() {
     <div className="flex flex-col md:flex-row h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-full md:w-[164px] bg-gradient-to-b from-green-500 to-blue-500 p-5 text-white flex flex-col">
-        <img
-          src="../../avl.png"
+        <Image
+          width={100}
+          height={100}
+          src="/avl.png"
           alt="User"
           className="w-28 h-14 rounded-lg mb-16"
         />
@@ -133,7 +142,13 @@ export default function Dashboard() {
       <main className="flex-1 overflow-y-auto">
         {/* Top Bar */}
         <div className="flex flex-col p-5 md:flex-row bg-white justify-between items-center mb-3 shadow-lg">
-        <img src="../../logo.png" alt="User" className="w-20 h-25 rounded-2" />
+          <Image
+            width={100}
+            height={100}
+            src="/logo.png"
+            alt="User"
+            className="w-20 h-25 rounded-2"
+          />
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             <div className="bg-gradient-to-r from-[rgba(69,168,72,0.5)] to-[rgba(1,166,187,0.5)] font-bold text-black px-8 py-2 rounded-xl">
               Human Resources
@@ -148,7 +163,7 @@ export default function Dashboard() {
 
         {/* Page Title */}
         <h3 className="text-2xl m-2 font-semibold">Welcome {userName} 👋</h3>
-        
+
         {/* Welcome Message */}
         <div className="flex flex-col md:flex-row justify-between items-center mx-4 mb-5">
           <div>
@@ -178,7 +193,7 @@ export default function Dashboard() {
         {/* Dashboard Cards */}
         <div className="grid mx-6 grid-cols-1 md:grid-cols-3 gap-3">
           <div className="bg-white p-4 rounded-lg shadow">
-            <h4 className="text-gray-500">Today's Attendance Rate</h4>
+            <h4 className="text-gray-500">Today is Attendance Rate</h4>
             <p className="text-2xl font-bold">36.2%</p>
           </div>
           <div className="bg-white p-4 rounded-lg shadow">
@@ -252,7 +267,9 @@ export default function Dashboard() {
                   cy="50%"
                   innerRadius={60}
                   outerRadius={100}
-                  label={({ value }) => `${Math.round((value / totalReservations) * 100)}%`}
+                  label={({ value }) =>
+                    `${Math.round((value / totalReservations) * 100)}%`
+                  }
                 >
                   {reservationPerService.map((entry, index) => (
                     <Cell

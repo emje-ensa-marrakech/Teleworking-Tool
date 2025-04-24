@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import Image from 'next/image';
 
 interface IdCardProps {
   id: number;
@@ -14,7 +15,6 @@ interface IdCardProps {
 }
 
 const IdCard: React.FC<IdCardProps> = ({
-  id,
   jobTitle,
   name,
   team,
@@ -48,7 +48,7 @@ const IdCard: React.FC<IdCardProps> = ({
           &times;
         </button>
         <div className="flex flex-col items-center">
-          <img src={imageSrc} alt={name} className="w-20 h-20 rounded-full" />
+          <Image src={imageSrc} alt={name} className="w-20 h-20 rounded-full" />
           <h2 className="text-xl font-bold mt-4">{name}</h2>
           <p className="text-gray-600">{jobTitle}</p>
           <p className="text-gray-500">{team}</p>
@@ -57,7 +57,7 @@ const IdCard: React.FC<IdCardProps> = ({
             className="mt-4 flex items-center space-x-2"
             onClick={() => setShowCalendar(!showCalendar)}
           >
-            <img
+            <Image
               src="/booking/calendar.png"
               alt="Calendar"
               className="w-8 h-8 cursor-pointer"

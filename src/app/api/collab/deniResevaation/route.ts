@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export default async function DELEtE(req : NextRequest) {
+export default async function DELETE(req : NextRequest) {
         const prisma = new PrismaClient()
         const data = await req.json()
 
