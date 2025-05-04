@@ -62,7 +62,7 @@ export default function Page() {
           <div className="w-[50vw] bg-white p-5 rounded-xl shadow-xs border-2 border-[rgba(6,6,17,0.1)]">
             <h1 className="text-[rgba(6,6,17,0.6)] mb-5">Reservation History</h1>
             <div className="grid grid-cols-2">
-              {data.last.map((e) => renderReservation(e.time, e.room, e.floor))}
+              {data.last.map((e,i) => renderReservation(e.time, e.room, e.floor,i))}
             </div>
           </div>
         </div>
@@ -89,9 +89,9 @@ const StatCard = ({
   </div>
 );
 
-const renderReservation = (time: string, room: string, floor: string) => {
+const renderReservation = (time: string, room: string, floor: string, key :any) => {
   return (
-    <div className="m-2">
+    <div className="m-2" key = {key}>
       <div className="flex items-center">
         <div className="text-[rgba(74,166,89,1)] text-xl p-2 bg-[rgba(120,216,123,0.24)] w-fit m-2">
           <PiCalendarDotsFill />
