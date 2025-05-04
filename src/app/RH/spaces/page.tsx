@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import QuickStats from "./QuickStats";
+import Sidebar from "@/app/components/Sidebar"; // Import Sidebar component
 
 interface Space {
   id: number;
@@ -87,53 +88,27 @@ export default function AVLSpace() {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-full md:w-[164px] bg-gradient-to-b from-green-500 to-blue-500 p-5 text-white flex flex-col">
-        <div className="text-2xl font-bold text-center mb-6">AVL SPACE</div>
-        <nav className="flex flex-col flex-grow space-y-4">
-          <Link href="/RH/home" className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2">
-            <Home size={24} />
-            <span>Home</span>
-          </Link>
-          <Link href="/RH/spaces" className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2">
-            <Map size={24} />
-            <span>Spaces</span>
-          </Link>
-          <Link href="/RH/booking" className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2">
-            <Calendar size={24} />
-            <span>Booking</span>
-          </Link>
-          <Link href="/RH/collaborators" className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2">
-            <FileUser size={24} />
-            <span>Collaborators</span>
-          </Link>
-          <div className="flex-1"></div>
-          <Link href="/RH/settings" className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2 mt-auto">
-            <Settings size={24} />
-            <span>Settings</span>
-          </Link>
-        </nav>
-      </aside>
+      <Sidebar /> {/* Add the Sidebar component */}
 
       <main className="flex-1 p-6">
         {/* Header */}
-        <header className="w-full h-16 flex items-center justify-between px-6 bg-white dark:bg-gray-900 shadow-sm mb-6">
+        <header className="w-full h-20 flex items-center justify-between px-6 bg-white dark:bg-gray-900 shadow-sm mb-6">
           <div className="flex items-center gap-4">
             <Image src="/logo.png" alt="Logo" width={180} height={38} />
           </div>
           <div className="flex items-center gap-6">
-            <div className="bg-gradient-to-r from-[rgba(69,168,72,0.5)] to-[rgba(1,166,187,0.5)] p-3 rounded-xl text-sm font-semibold text-white">
+            <div className="bg-gradient-to-r from-[rgba(69,168,72,0.5)] to-[rgba(1,166,187,0.5)] p-3 rounded-xl text-lg font-semibold text-white">
               Human Resources
             </div>
             <button className="relative text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" aria-label="Notifications">
-              <Bell className="w-5 h-5" />
+              <Bell className="w-6 h-6" />
               <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-900"></span>
             </button>
             <div className="flex flex-col items-end">
-              <span className="text-sm font-medium text-gray-900 dark:text-white">Abdelghani Bensalih</span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">Human Ressource</span>
+              <span className="text-base font-medium text-gray-900 dark:text-white">Abdelghani Bensalih</span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">Human Ressource</span>
             </div>
-            <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700" />
+            <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-700" />
           </div>
         </header>
 

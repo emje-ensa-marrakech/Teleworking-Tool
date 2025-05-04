@@ -47,7 +47,7 @@ export default function Card({
         {confirmed === false ? (
           <>
             <p className="font-bold p-2.5 rounded text-center text-red-600 bg-red-100">
-              Declined ❌
+              Declined 
             </p>
             <button
               className="accept"
@@ -62,7 +62,7 @@ export default function Card({
         ) : (
           <>
             <p className="font-bold p-2.5 rounded text-center text-green-600 bg-green-100">
-              Accepted ✅
+              Accepted 
             </p>
             <button
               className="decline"

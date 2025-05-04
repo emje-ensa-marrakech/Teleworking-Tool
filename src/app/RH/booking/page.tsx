@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 import Card from "./card";
 import IdCard from "./card_id";
-import { Home, Calendar, Settings, Bell, Map, FileUser } from "lucide-react";
+import { Bell } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import Sidebar from "@/app/components/Sidebar"; // Updated import
 
 interface User {
   userId: string;
@@ -105,57 +106,8 @@ export default function Reservations() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gradient-to-b from-green-500 to-blue-500 text-white p-4">
-        <div className="flex justify-center mb-8">
-          <Image 
-          src="/booking/image-removebg-preview 4.png" 
-          alt="company logo"
-          
-          width={100}
-          height={100}
-          />
-        </div>
-        <nav className="space-y-4">
-          <Link
-            href="/RH/home"
-            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
-          >
-            <Home size={24} />
-            <span>Home</span>
-          </Link>
-          <Link
-            href="/RH/spaces"
-            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
-          >
-            <Map size={24} />
-            <span>Spaces</span>
-          </Link>
-          <Link
-            href="/RH/booking"
-            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
-          >
-            <Calendar size={24} />
-            <span>Booking</span>
-          </Link>
-          <Link
-            href="/RH/collaborators"
-            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
-          >
-            <FileUser size={24} />
-            <span>Collaborators</span>
-          </Link>
-          <Link
-            href="/RH/settings"
-            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors mt-auto"
-          >
-            <Settings size={24} />
-            <span>Settings</span>
-          </Link>
-        </nav>
-      </aside>
+      <Sidebar />
 
-      {/* Main Content */}
       <main className="flex-1 p-6">
         {/* Top Navigation */}
         <header className="flex justify-between items-center mb-6 p-4 bg-white rounded-lg shadow">
@@ -170,11 +122,19 @@ export default function Reservations() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <button className="bg-green-600 text-white px-4 py-2 rounded">
+            <button className="bg-gradient-to-r from-[rgba(69,168,72,0.5)] to-[rgba(1,166,187,0.5)] text-white px-4 py-2 rounded-xl font-semibold">
               Human Resources
             </button>
             <Bell size={24} className="text-gray-600" />
-            <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+            <div className="flex flex-col items-end">
+              <span className="text-xl font-semibold text-gray-900 dark:text-white">
+                Abdelghani Bensalih
+              </span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Human Resources
+              </span>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-white font-bold">
               O
             </div>
           </div>
