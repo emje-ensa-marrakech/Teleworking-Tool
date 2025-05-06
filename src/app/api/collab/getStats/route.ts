@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
-
+  
     const prisma = new PrismaClient()
 
 
@@ -15,8 +15,8 @@ export async function GET(req: NextRequest) {
         )
         const user = await prisma.user.findUnique(
             {
-                where: {
-                    id: Number(id)
+                where : {
+                    id : Number(id)
                 }
             }
         )
@@ -39,33 +39,11 @@ export async function GET(req: NextRequest) {
         //         }
         //     }
         // )
-        const avilabe = rooms.filter((e) => !e.status)
+        const avilabe = rooms.filter((e)=>!e.status)
 
         const rese = await prisma.reservation.findMany({})
-        const last4 = await Promise.all(
-            rese
-              .filter((e) => e.userId === Number(id))
-              .slice(0, 3)
-              .map(async (e) => {
-                const room = await prisma.workspace.findUnique({
-                  where: {
-                    id: e.workspaceID,
-                  },
-                });
-          
-                return {
-                  time: e.time,
-                  floor: room?.floor ?? null,
-                  room: room?.name ?? null,
-                };
-              })
-          );
-          
-
-        console.log(last4);
-
-
-        const resMad = rese.filter((e) => e.userId == Number(id))
+        const last4 = rese.filter((e)=>e.userId == Number(id)).slice(0,3)
+        const resMad = rese.filter((e)=>e.userId == Number(id))
 
         return NextResponse.json(
             {
@@ -73,9 +51,9 @@ export async function GET(req: NextRequest) {
                 // "notifications": notification,
                 "available": avilabe.length,
                 "resMade": rese.length,
-                "your": resMad.length,
-                "total": rooms.length,
-                "last": last4
+                "your" : resMad.length,
+                "total" : rooms.length,
+                "last" : last4
             }
         )
 
@@ -90,4 +68,4 @@ export async function GET(req: NextRequest) {
             }
         )
     }
-}// knt khdam fhad api bach i3ti dook stats
+}

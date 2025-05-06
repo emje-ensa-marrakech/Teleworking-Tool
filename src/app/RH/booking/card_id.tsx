@@ -48,13 +48,7 @@ const IdCard: React.FC<IdCardProps> = ({
           &times;
         </button>
         <div className="flex flex-col items-center">
-          <Image
-            src={imageSrc}
-            alt={name}
-            width={80}
-            height={80}
-            className="rounded-full"
-          />
+          <Image src={imageSrc} alt={name} className="w-20 h-20 rounded-full" />
           <h2 className="text-xl font-bold mt-4">{name}</h2>
           <p className="text-gray-600">{jobTitle}</p>
           <p className="text-gray-500">{team}</p>
@@ -66,9 +60,7 @@ const IdCard: React.FC<IdCardProps> = ({
             <Image
               src="/booking/calendar.png"
               alt="Calendar"
-              width={32}
-              height={32}
-              className="cursor-pointer"
+              className="w-8 h-8 cursor-pointer"
               style={{ filter: 'invert(1)' }}
             />
             <span className="text-gray-600">

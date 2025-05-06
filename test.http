@@ -1,8 +1,14 @@
-POST   http://localhost:3000/api/auth/signIn
+POST   http://localhost:3000/api/auth/signUp
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJvdWRhZHNhbWlyYUBnbWFpbC5jb20iLCJpYXQiOjE3NDAyMjUyMzN9.gbNOFof0B_EufTXD8wAwbhC5QZfMqITBRBzfe9fdpq4
 
 {
+    "name" : "Mouad_TL",
+    "gender" : "Mr",
+    "department" : "it",
+    "personalNumber" : 123456789,
     "password" : "1234",
-    "email" : "mouad_collab@gmail.com"
+    "type" : "TLorSTL",
+    "email" : "mouad_TL@gmail.com"
+
 }

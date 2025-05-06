@@ -1,198 +1,448 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Home,
-  Calendar,
-  Settings,
-  Map,
-  FileUser,
-  Bell,
-  Search,
-} from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import QuickStats from "./QuickStats";
-import Sidebar from "@/app/components/Sidebar"; // Import Sidebar component
+import { useState, useEffect } from "react";
+import { FaBoxes, FaClock, FaChartLine, FaPercentage } from "react-icons/fa";
 
-interface Space {
+const stats = [
+  {
+    title: "Total Rooms",
+    value: 285,
+    icon: <FaBoxes className="text-xl text-gray-600 mr-2" />,
+  },
+  {
+    title: "Pending Approval",
+    value: 120,
+    icon: <FaClock className="text-xl text-yellow-500 mr-2" />,
+  },
+  {
+    title: "Demanded Room this month",
+    value: 89,
+    icon: <FaChartLine className="text-xl text-green-500 mr-2" />,
+  },
+  {
+    title: "Presence Rate",
+    value: "46%",
+    icon: <FaPercentage className="text-xl text-blue-500 mr-2" />,
+  },
+];
+
+interface Workspace {
   id: number;
   name: string;
-  department: string;
-  floors: number;
+  departement: string;
+  floor: number | null;
+  capacity: number | null;
+  status: boolean;
+  available: number | null;
 }
 
-interface NewSpace {
+interface NewWorkspace {
   name: string;
-  department: string;
-  floors: string;
+  departement: string;
+  floor: string;
+  capacity: string;
+  status: boolean;
+  available: number | null;
 }
 
 export default function AVLSpace() {
-  const [showAddSpace, setShowAddSpace] = useState(false);
-  const [spaces, setSpaces] = useState<Space[]>([
-    { id: 1, name: "Conference Room", department: "IT", floors: 1 },
-    { id: 2, name: "IT Room 2", department: "HR", floors: 2 },
-    { id: 3, name: "TISAX 5", department: "Sales", floors: 1 },
-  ]);
-  const [newSpace, setNewSpace] = useState<NewSpace>({
+  const [showAddWorkspace, setShowAddWorkspace] = useState(false);
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
+  const [newWorkspace, setNewWorkspace] = useState<NewWorkspace>({
     name: "",
-    department: "",
-    floors: "",
+    departement: "",
+    floor: "",
+    capacity: "",
+    available: null,
+    status: true,
   });
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [RH_USER_ID, setRH_USER_ID] = useState<string | null>(null);
+  const [successMessageDelete, setSuccessMessageDelete] = useState<
+    string | null
+  >(null);
 
-  const handleAddSpace = (e: React.FormEvent) => {
+  useEffect(() => {
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    const RH_USER_ID =
+      localStorage.getItem("id") || sessionStorage.getItem("id");
+    setToken(token);
+    setRH_USER_ID(RH_USER_ID);
+  }, []);
+
+  // Fetch workspaces on component mount
+  useEffect(() => {
+    if (!RH_USER_ID || !token) return;
+
+    const fetchWorkspaces = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(`/api/RH/spaces?userId=${RH_USER_ID}`, {
+          headers: {
+            Authorization: token,
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          setWorkspaces(data.data);
+        } else {
+          setError(data.msg || "Failed to fetch workspaces");
+        }
+      } catch (err) {
+        setError("Network error occurred");
+        console.error("Error fetching workspaces:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchWorkspaces();
+  }, [RH_USER_ID, token]);
+
+  const handleAddWorkspace = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Save current state for potential rollback
+    const previousWorkspaces = workspaces;
+
+    // Optimistic update
     if (editingId !== null) {
-      setSpaces(
-        spaces.map((space) =>
-          space.id === editingId
-            ? { ...newSpace, id: editingId, floors: Number(newSpace.floors) }
-            : space
-        ) as Space[]
+      setWorkspaces((prevWorkspaces) =>
+        prevWorkspaces.map((ws) =>
+          ws.id === editingId
+            ? {
+                ...ws,
+                name: newWorkspace.name,
+                departement: newWorkspace.departement,
+                floor: Number(newWorkspace.floor) || null,
+                capacity: Number(newWorkspace.capacity) || null,
+                status: newWorkspace.status,
+              }
+            : ws
+        )
       );
-      setEditingId(null);
-    } else {
-      setSpaces([
-        ...spaces,
-        { ...newSpace, id: Date.now(), floors: Number(newSpace.floors) },
-      ] as Space[]);
     }
-    setNewSpace({ name: "", department: "", floors: "" });
-    setShowAddSpace(false);
-  };
 
-  const modifySpace = (id: number) => {
-    const spaceToEdit = spaces.find((space) => space.id === id);
-    if (spaceToEdit) {
-      setNewSpace({
-        ...spaceToEdit,
-        floors: spaceToEdit.floors.toString(),
+    try {
+      setIsLoading(true);
+      const method = editingId !== null ? "PUT" : "POST";
+
+      const response = await fetch(`/api/RH/spaces`, {
+        method,
+        headers: {
+          Authorization: token!,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: RH_USER_ID,
+          workspaceId: editingId,
+          name: newWorkspace.name,
+          departement: newWorkspace.departement,
+          floor: newWorkspace.floor,
+          capacity: newWorkspace.capacity,
+          status: newWorkspace.status,
+          available: newWorkspace.available,
+        }),
       });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.msg || "Operation failed");
+      }
+
+      // Final update with server data (in case of any transformations)
+      if (editingId !== null) {
+        setWorkspaces((prevWorkspaces) =>
+          prevWorkspaces.map((ws) => (ws.id === editingId ? data.data : ws))
+        );
+      } else {
+        setWorkspaces((prevWorkspaces) => [...prevWorkspaces, data.data]);
+      }
+
+      // Show success message and reset form (same as before)
+      // ...
+    } catch (err) {
+      // Rollback on error
+      setWorkspaces(previousWorkspaces);
+      setError(err instanceof Error ? err.message : "An error occurred");
+      console.error("Error in workspace operation:", err);
+    } finally {
+      setIsLoading(false);
+      setShowAddWorkspace(false);
     }
-    setEditingId(id);
-    setShowAddSpace(true);
+  };
+  const modifyWorkspace = (id: number) => {
+    const workspaceToEdit = workspaces.find((ws) => ws.id === id);
+    if (workspaceToEdit) {
+      setNewWorkspace({
+        name: workspaceToEdit.name,
+        departement: workspaceToEdit.departement,
+        floor: workspaceToEdit.floor?.toString() || "",
+        capacity: workspaceToEdit.capacity?.toString() || "",
+        status: workspaceToEdit.status,
+        available: workspaceToEdit.available,
+      });
+      setEditingId(id);
+      setShowAddWorkspace(true);
+    }
   };
 
-  const deleteSpace = (id: number) => {
-    setSpaces(spaces.filter((space) => space.id !== id));
+  const deleteWorkspace = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this workspace?")) return;
+
+    try {
+      setIsLoading(true);
+      const response = await fetch(`/api/RH/spaces`, {
+        method: "DELETE",
+        headers: {
+          Authorization: token!,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: RH_USER_ID,
+          workspaceId: id,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.reservationCount > 0) {
+          throw new Error(
+            `Cannot delete - workspace has ${data.reservationCount} active reservation(s)`
+          );
+        }
+        throw new Error(data.msg || "Delete failed");
+      }
+
+      // Update the frontend state immediately without refreshing
+      setWorkspaces((prevWorkspaces) =>
+        prevWorkspaces.filter((ws) => ws.id !== id)
+      );
+
+      // Show success message
+      setSuccessMessageDelete("Workspace deleted successfully!");
+      setTimeout(() => setSuccessMessageDelete(null), 3000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Delete failed");
+      console.error("Error deleting workspace:", err);
+    } finally {
+      setIsLoading(false);
+      setShowAddWorkspace(false);
+    }
   };
 
-  const filteredSpaces = spaces.filter((space) =>
-    `${space.name} ${space.department} ${space.floors}`
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
-  );
+  if (isLoading && workspaces.length === 0) {
+    return (
+      <div className="flex h-screen bg-gray-100">
+        <main className="flex-1 p-6">
+          <div className="flex justify-center items-center h-full">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-screen bg-gray-100">
+        <main className="flex-1 p-6">
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
+            <strong className="font-bold">Error: </strong>
+            <span className="block sm:inline">{error}</span>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar /> {/* Add the Sidebar component */}
-
       <main className="flex-1 p-6">
-        {/* Header */}
-        <header className="w-full h-20 flex items-center justify-between px-6 bg-white dark:bg-gray-900 shadow-sm mb-6">
-          <div className="flex items-center gap-4">
-            <Image src="/logo.png" alt="Logo" width={180} height={38} />
-          </div>
-          <div className="flex items-center gap-6">
-            <div className="bg-gradient-to-r from-[rgba(69,168,72,0.5)] to-[rgba(1,166,187,0.5)] p-3 rounded-xl text-lg font-semibold text-white">
-              Human Resources
-            </div>
-            <button className="relative text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" aria-label="Notifications">
-              <Bell className="w-6 h-6" />
-              <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-900"></span>
-            </button>
-            <div className="flex flex-col items-end">
-              <span className="text-base font-medium text-gray-900 dark:text-white">Abdelghani Bensalih</span>
-              <span className="text-sm text-gray-500 dark:text-gray-400">Human Ressource</span>
-            </div>
-            <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-700" />
-          </div>
-        </header>
-
-        {/* Quick Stats */}
-        <QuickStats />
-
-        {/* Top Controls: Add + Search */}
-        <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
-          <button
-            onClick={() => setShowAddSpace(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow"
-          >
-            + Add Space
-          </button>
-
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-gray-700">Search</span>
-            <Search className="w-4 h-4 text-gray-600" />
-            <input
-              type="text"
-              placeholder="Search spaces..."
-              className="border border-gray-300 rounded px-3 py-2 text-sm"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+        <div className="bg-white p-4 rounded-xl shadow-md mb-6">
+          <h2 className="text-lg font-semibold mb-4">Quick Stats</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            {stats.map((stat, index) => (
+              <div
+                key={index}
+                className="bg-gray-100 rounded-lg p-4 flex flex-col items-center justify-center"
+              >
+                <div className="flex items-center mb-2">
+                  {stat.icon}
+                  <span className="text-sm font-medium text-gray-700">
+                    {stat.title}
+                  </span>
+                </div>
+                <div className="text-2xl font-bold text-black">
+                  {stat.value}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
+        <section className="bg-gray-200 p-4 rounded flex justify-between items-center mb-6">
+          <h3 className="text-xl font-bold">Workspace Management</h3>
+          <button
+            onClick={() => setShowAddWorkspace(true)}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+            disabled={isLoading}
+          >
+            {isLoading ? "Processing..." : "+ Add Workspace"}
+          </button>
+        </section>
 
-        {/* Add Space Form */}
-        {showAddSpace && (
-          <div className="bg-white p-6 rounded shadow-lg w-80 absolute right-4 top-24 border border-blue-200 z-10">
-            <form className="flex flex-col space-y-4" onSubmit={handleAddSpace}>
-              <label className="font-bold">Space Name:</label>
+        {showAddWorkspace && (
+          <div className="bg-teal-100 p-6 rounded shadow-lg w-80 absolute right-4 top-20 z-10">
+            <form
+              className="flex flex-col space-y-4"
+              onSubmit={handleAddWorkspace}
+            >
+              <h3 className="font-bold text-lg">
+                {editingId !== null ? "Edit Workspace" : "Add New Workspace"}
+              </h3>
+
+              <label className="font-bold">Workspace Name:</label>
               <input
                 type="text"
                 className="p-2 border rounded"
-                value={newSpace.name}
-                onChange={(e) => setNewSpace({ ...newSpace, name: e.target.value })}
+                value={newWorkspace.name}
+                onChange={(e) =>
+                  setNewWorkspace({ ...newWorkspace, name: e.target.value })
+                }
                 required
               />
+
               <label className="font-bold">Department:</label>
               <input
                 type="text"
                 className="p-2 border rounded"
-                value={newSpace.department}
-                onChange={(e) => setNewSpace({ ...newSpace, department: e.target.value })}
+                value={newWorkspace.departement}
+                onChange={(e) =>
+                  setNewWorkspace({
+                    ...newWorkspace,
+                    departement: e.target.value,
+                  })
+                }
                 required
               />
+
               <label className="font-bold">Floor:</label>
               <input
                 type="number"
                 className="p-2 border rounded"
-                value={newSpace.floors}
-                onChange={(e) => setNewSpace({ ...newSpace, floors: e.target.value })}
-                required
+                value={newWorkspace.floor}
+                onChange={(e) =>
+                  setNewWorkspace({ ...newWorkspace, floor: e.target.value })
+                }
                 min="1"
               />
+
+              <label className="font-bold">Capacity:</label>
+              <input
+                type="number"
+                className="p-2 border rounded"
+                value={newWorkspace.capacity}
+                onChange={(e) =>
+                  setNewWorkspace({ ...newWorkspace, capacity: e.target.value })
+                }
+                min="1"
+              />
+
+              <label className="font-bold">Available:</label>
+              <input
+                type="number"
+                className="p-2 border rounded"
+                value={newWorkspace.available || ""}
+                onChange={(e) =>
+                  setNewWorkspace({
+                    ...newWorkspace,
+                    available: Number(e.target.value),
+                  })
+                }
+                min="0"
+              />
+
+              <label className="font-bold flex items-center">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={newWorkspace.status}
+                  onChange={(e) =>
+                    setNewWorkspace({
+                      ...newWorkspace,
+                      status: e.target.checked,
+                    })
+                  }
+                />
+                Active
+              </label>
+
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                disabled={isLoading}
               >
-                {editingId !== null ? "Modify Space" : "Add Space"}
+                {isLoading
+                  ? "Processing..."
+                  : editingId !== null
+                  ? "Update Workspace"
+                  : "Add Workspace"}
+              </button>
+
+              <button
+                type="button"
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
+                onClick={() => {
+                  setShowAddWorkspace(false);
+                  setEditingId(null);
+                  setNewWorkspace({
+                    name: "",
+                    departement: "",
+                    floor: "",
+                    capacity: "",
+                    available: null,
+                    status: true,
+                  });
+                }}
+              >
+                Cancel
               </button>
             </form>
           </div>
         )}
 
-        {/* Grid of Spaces */}
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredSpaces.map((space) => (
-            <div key={space.id} className="bg-white p-4 rounded shadow border border-gray-200">
-              <h3 className="text-lg font-bold text-gray-800">{space.name}</h3>
-              <p className="text-gray-600">Department: {space.department}</p>
-              <p className="text-gray-600">Floors: {space.floors} floor(s)</p>
+          {workspaces.map((workspace) => (
+            <div key={workspace.id} className="bg-white p-4 rounded shadow">
+              <h3 className="text-lg font-bold">{workspace.name}</h3>
+              <p>Department: {workspace.departement}</p>
+              <p>Floor: {workspace.floor || "N/A"}</p>
+              <p>Capacity: {workspace.capacity || "N/A"}</p>
+              <p>Available: {workspace.available || "N/A"}</p>
+              <p>Status: {workspace.status ? "Active" : "Inactive"}</p>
               <div className="flex justify-between mt-4">
                 <button
-                  className="text-purple-600 px-3 py-1 bg-gray-100 rounded hover:bg-purple-100"
-                  onClick={() => modifySpace(space.id)}
+                  className="text-purple-600 p-2 bg-gray-100 rounded hover:bg-purple-100"
+                  onClick={() => modifyWorkspace(workspace.id)}
+                  disabled={isLoading}
                 >
                   Modify
                 </button>
                 <button
-                  className="text-red-600 px-3 py-1 bg-gray-100 rounded hover:bg-red-100"
-                  onClick={() => deleteSpace(space.id)}
+                  className="text-red-600 p-2 bg-gray-100 rounded hover:bg-red-100"
+                  onClick={() => deleteWorkspace(workspace.id)}
+                  disabled={isLoading}
                 >
                   Delete
                 </button>
