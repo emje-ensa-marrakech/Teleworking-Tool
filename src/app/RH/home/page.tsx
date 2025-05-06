@@ -126,6 +126,13 @@ export default function Dashboard() {
             <FileUser size="24" />
             <span>Collaborators</span>
           </Link>
+          <Link
+            href="/RH/attendance"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
+          >
+            <FileUser size="24" />
+            <span>Attendance</span>
+          </Link>
 
           <div className="flex-1"></div>
           <Link

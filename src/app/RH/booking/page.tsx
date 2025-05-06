@@ -2,10 +2,9 @@
 import { useEffect, useState } from "react";
 import Card from "./card";
 import IdCard from "./card_id";
-import { Bell } from "lucide-react";
+import { Bell, Home, Map, FileUser, Settings } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import Sidebar from "@/app/components/Sidebar"; // Updated import
 
 interface User {
   userId: string;
@@ -31,8 +30,7 @@ export default function Reservations() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedReservation, setSelectedReservation] =
-    useState<Reservation | null>(null);
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -72,9 +70,7 @@ export default function Reservations() {
       const data = await response.json();
       setReservations((prev) =>
         prev.map((res) =>
-          res.id === id
-            ? { ...res, confirmed: data.reservation.confirmed }
-            : res
+          res.id === id ? { ...res, confirmed: data.reservation.confirmed } : res
         )
       );
     } catch (error) {
@@ -106,7 +102,47 @@ export default function Reservations() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <Sidebar />
+      {/* Sidebar */}
+      <aside className="w-64 bg-gradient-to-b from-green-500 to-blue-500 text-white p-4">
+        <div className="flex justify-center mb-8">
+          <Image 
+            src="/booking/image-removebg-preview 4.png" 
+            alt="company logo"
+            width={100}
+            height={100}
+          />
+        </div>
+        <nav className="space-y-4">
+          <Link
+            href="/RH/home"
+            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
+          >
+            <Home size={24} />
+            <span>Home</span>
+          </Link>
+          <Link
+            href="/RH/spaces"
+            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors"
+          >
+            <Map size={24} />
+            <span>Spaces</span>
+          </Link>
+          <Link
+            href="/RH/attendance"
+            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
+          >
+            <FileUser size={24} />
+            <span>Attendance</span>
+          </Link>
+          <Link
+            href="/RH/settings"
+            className="flex flex-col items-center p-2 rounded-lg hover:bg-white hover:text-black transition-colors mt-auto"
+          >
+            <Settings size={24} />
+            <span>Settings</span>
+          </Link>
+        </nav>
+      </aside>
 
       <main className="flex-1 p-6">
         {/* Top Navigation */}
