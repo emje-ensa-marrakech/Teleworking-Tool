@@ -46,6 +46,7 @@ model Workspace {
   floor       Int?
   capacity    Int?
   expired     DateTime?
+  workspaceName String?
   Reservation Reservation[]
 }
 

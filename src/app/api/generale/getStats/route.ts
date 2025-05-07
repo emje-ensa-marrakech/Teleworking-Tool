@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
                 "name": user!.name,
                 // "notifications": notification,
                 "available": avilabe.length,
-                "resMade": rese.length,
+                "resMade": rooms.length,
                 "your" : resMad.length,
                 "total" : rooms.length,
                 "last" : last4
