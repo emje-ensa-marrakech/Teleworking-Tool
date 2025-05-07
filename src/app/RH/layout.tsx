@@ -21,7 +21,7 @@ export default function RootLayout({
       const token = localStorage.getItem("token") || sessionStorage.getItem("token");
       const id = localStorage.getItem("id") || sessionStorage.getItem("id");
   
-      fetch(`/api/collab/getStats?id=${id}`, {
+      fetch(`/api/generale/getStats?id=${id}`, {
         headers: {
           Authorization: token!,
           "Content-Type": "application/json",
