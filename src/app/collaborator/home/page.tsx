@@ -48,12 +48,18 @@ export default function Page() {
 
   return (
     <main className="h-full flex flex-col justify-between p-2">
-      <div className="grid grid-cols-3 gap-4 m-5">
-        <StatCard title="Total Spaces:" value={data.total} bg="rgba(120,216,123,0.44)" />
-        <StatCard title="Available Spaces:" value={data.available} bg="rgba(180,244,217,1)" />
-        <StatCard title="Your Bookings:" value={data.your} bg="rgba(146,223,213,1)" />
+      {/* New stat section with more cards */}
+      <div className="flex flex-wrap justify-center gap-8 m-5">
+        <StatCard title="Total Spaces:" value={data.total} bg="rgba(120, 216, 123, 0.66)" />
+        <StatCard title="Total Bookings:" value={data.total} bg="rgb(180, 244, 217)" />
+        <StatCard title="Available Spaces:" value={data.available} bg="rgb(146, 223, 213)" />
+        <div className="w-full flex justify-center gap-8 m-5">
+          <StatCard title="Your Bookings:" value={data.your} bg="rgba(121, 212, 191, 0.6)" />
+          <StatCard title="Pending approvals:" value={0} bg="rgba(25, 210, 139, 0.53)" />
+        </div>
       </div>
 
+      {/* Reservation History */}
       <div className="flex justify-center items-center w-full my-10">
         <div className="w-[50vw] bg-white p-5 rounded-xl shadow-xs border-2 border-[rgba(6,6,17,0.1)]">
           <h2 className="text-[rgba(6,6,17,0.6)] mb-5 text-2xl">Reservation History</h2>
