@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   const data = await req.json();
 
   // Validate input parameters
-  if (!data.id || !data.time || !data.workspaceId) {
+  if (!data.userId || !data.reservationDate || !data.spaceId) {
     return NextResponse.json(
       {
         status: "error",
@@ -16,9 +16,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const userId = Number(data.id);
-  const workspaceId = Number(data.workspaceId);
-  const date = new Date(data.time);
+  const userId = Number(data.userId);
+  const workspaceId = Number(data.spaceId);
+  const date = new Date(data.reservationDate);
 
   // Validate that the date is not in the past
   if (date < new Date()) {

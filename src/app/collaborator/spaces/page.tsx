@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Bell, Calendar as CalendarIcon } from "lucide-react";
 import Image from "next/image";
 import { format } from "date-fns";
@@ -8,39 +8,64 @@ import { fr } from "date-fns/locale";
 type Space = {
   id: number;
   name: string;
-  department: string;
-  floors: number;
+  departement: string;
+  floor: number;
   status: boolean;
 };
 
 export default function AVLSpace() {
-  const [spaces, setSpaces] = useState<Space[]>([
-    { id: 1, name: "Conference Room", department: "IT", floors: 1, status: true },
-    { id: 2, name: "IT Room 2", department: "HR", floors: 2, status: true },
-    { id: 3, name: "TISAX 5", department: "Sales", floors: 1, status: true },
-    { id: 4, name: "Meeting Room", department: "IT", floors: 1, status: true },
-    { id: 5, name: "IT Room 1", department: "HR", floors: 2, status: false },
-    { id: 6, name: "TISAX 3", department: "Sales", floors: 1, status: true },
-    { id: 7, name: "Conference Room", department: "IT", floors: 1, status: false },
-    { id: 8, name: "IT Room 2", department: "HR", floors: 2, status: true },
-    { id: 9, name: "TISAX 5", department: "Sales", floors: 1, status: false },
-  ]);
-
+  const [spaces, setSpaces] = useState<Space[]>([]);
   const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
   const [date, setDate] = useState<Date | null>(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState<string>("");
   const [departmentFilter, setDepartmentFilter] = useState<string>("");
   const [floorFilter, setFloorFilter] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+      const storedToken = localStorage.getItem("token") || sessionStorage.getItem("token");
+      const storedUserId = localStorage.getItem("id") || sessionStorage.getItem("id");
+      setToken(storedToken);
+      setUserId(storedUserId);
+    }, []);
+
+     useEffect(() => {
+        if (token) {
+          fetchSpaces();
+        }
+      }, [token]);
+  
+  
+const  fetchSpaces = async () => {
+      try {
+        const response = await fetch("/api/collab/fetchSpaces",{
+          headers: {
+             Authorization: token!,
+            "Content-Type": "application/json",
+          },
+        }
+        ); // <-- Your GET endpoint
+        const data = await response.json();
+        setSpaces(data.spaces || []);
+        console.log("Fetched spaces:", data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch spaces:", error);
+      }
+    }
+  
 
   // Get unique departments and floors for filter options
-  const departments = [...new Set(spaces.map(space => space.department))];
-  const floors = [...new Set(spaces.map(space => space.floors))].sort();
+  const departments = [...new Set(spaces.map(space => space.departement))];
+  const floors = [...new Set(spaces.map(space => space.floor))].sort();
 
   // Filter spaces based on selected filters
   const filteredSpaces = spaces.filter(space => {
-    const matchesDepartment = departmentFilter === "" || space.department === departmentFilter;
-    const matchesFloor = floorFilter === null || space.floors === floorFilter;
+    const matchesDepartment = departmentFilter === "" || space.departement === departmentFilter;
+    const matchesFloor = floorFilter === null || space.floor === floorFilter;
     return matchesDepartment && matchesFloor;
   });
 
@@ -53,14 +78,41 @@ export default function AVLSpace() {
     }
   };
 
-  const confirmReservation = () => {
+  const confirmReservation = async () => {
     if (date && selectedSpace) {
-      setConfirmationMessage(
-        `Your reservation request for "${selectedSpace.name}" on ${format(date, "PPP", { locale: fr })} has been submitted. Please wait for HR department confirmation.`
-      );
-      setSelectedSpace(null);
-      setDate(null);
-      setShowCalendar(false);
+      try {
+        
+
+        const reservationData = {
+          userId,
+          spaceId: selectedSpace.id,
+          reservationDate: date.toISOString().split("T")[0], // e.g., 2024-05-07
+        };
+
+        const response = await fetch("/api/collab/makeReservation", { // <-- Your POST endpoint
+          method: "POST",
+          headers: {
+            Authorization: token!,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(reservationData),
+          
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to submit reservation");
+        }
+
+        setConfirmationMessage(
+          `Your reservation request for "${selectedSpace.name}" on ${format(date, "PPP", { locale: fr })} has been submitted. Please wait for HR department confirmation.`
+        );
+        setSelectedSpace(null);
+        setDate(null);
+        setShowCalendar(false);
+      } catch (error) {
+        console.error(error);
+        alert("Failed to reserve the space. Please try another date.");
+      }
     } else {
       alert("Please select a date.");
     }
@@ -70,6 +122,10 @@ export default function AVLSpace() {
     setDepartmentFilter("");
     setFloorFilter(null);
   };
+
+  if (loading) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  }
 
   return (
     <div className="flex-1 bg-gray-100 min-h-screen">
@@ -111,8 +167,8 @@ export default function AVLSpace() {
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">All Floors</option>
-                {floors.map(floor => (
-                  <option key={floor} value={floor}>Floor {floor}</option>
+                {spaces.map(space => (
+                  <option key={space.id} value={space.floor}>Floor {space.floor}</option>
                 ))}
               </select>
             </div>
@@ -148,8 +204,8 @@ export default function AVLSpace() {
           {filteredSpaces.map((space) => (
             <div key={space.id} className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow">
               <h3 className="text-lg font-bold">{space.name}</h3>
-              <p className="text-gray-600">Department: {space.department}</p>
-              <p className="text-gray-600">Floor: {space.floors}</p>
+              <p className="text-gray-600">Department: {space.departement}</p>
+              <p className="text-gray-600">Floor: {space.floor}</p>
               <p className="mb-3">
                 Status: 
                 <span className={`ml-2 font-semibold ${space.status ? 'text-green-600' : 'text-red-600'}`}>
