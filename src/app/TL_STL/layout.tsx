@@ -82,7 +82,7 @@ export default function RootLayout({
 
           <div className="flex-1"></div>
           <Link
-            href="/RH/settings"
+            href="/TL_STL/settings"
             className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2 mt-auto"
           >
             <Settings size="24" />
