@@ -68,6 +68,7 @@ export async function POST(req: NextRequest) {
   // Check if the workspace is already reserved for the selected time
   const existingReservation = await prisma.reservation.findFirst({
     where: {
+      
       workspaceID: workspaceId,
       time: date,
     },

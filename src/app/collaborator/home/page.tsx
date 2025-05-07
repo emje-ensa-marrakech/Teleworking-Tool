@@ -6,7 +6,7 @@ import { PiCalendarDotsFill } from "react-icons/pi";
 
 interface Reservation {
   time: string;
-  room: string;
+  workspaceName: string;
   floor: string;
 }
 
@@ -14,7 +14,7 @@ interface Stats {
   name: string;
   total: number;
   available: number;
-  yours: number;
+  your: number;
   last: Reservation[];
 }
 
@@ -52,7 +52,7 @@ export default function Page() {
       <main className="h-full flex flex-col justify-between p-2">
         <div className="grid grid-cols-3 gap-4 m-5">
           <StatCard
-            title="Total Bookings:"
+            title="Total spaces:"
             value={data.total}
             bg="rgba(120,216,123,0.44)"
           />
@@ -63,7 +63,7 @@ export default function Page() {
           />
           <StatCard
             title="Your Bookings:"
-            value={data.yours}
+            value={data.your}
             bg="rgba(146,223,213,1)"
           />
         </div>
@@ -75,7 +75,7 @@ export default function Page() {
             </h1>
             <div className="grid grid-cols-2">
               {data.last.map((e, i) =>
-                renderReservation(e.time, e.room, e.floor, i)
+                renderReservation(e.time, e.workspaceName, e.floor, i)
               )}
             </div>
           </div>
