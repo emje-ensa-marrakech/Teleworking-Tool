@@ -5,11 +5,7 @@ const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   try {
-    const spaces = await prisma.workspace.findMany({
-      where: {
-        status: true,  // Ensure only active workspaces are shown
-      },
-    });
+    const spaces = await prisma.workspace.findMany({});
 
     return NextResponse.json({
       status: "done",

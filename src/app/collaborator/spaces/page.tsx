@@ -124,7 +124,11 @@ const  fetchSpaces = async () => {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gray-100 p-8 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
   }
 
   return (
@@ -167,8 +171,8 @@ const  fetchSpaces = async () => {
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">All Floors</option>
-                {spaces.map(space => (
-                  <option key={space.id} value={space.floor}>Floor {space.floor}</option>
+                {floors.map(floor => (
+                  <option key={floor} value={floor}>Floor {floor}</option>
                 ))}
               </select>
             </div>
