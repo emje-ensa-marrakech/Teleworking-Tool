@@ -210,15 +210,14 @@ export default function CollaboratorsPage() {
                 <InputField label="Department*" name="department" value={formData.department} handleChange={handleChange} required />
                 <InputField label="Work Hours*" name="workshours" value={formData.workshours} handleChange={handleChange} required />
                 <SelectField 
-                  label="User Type*" 
+                  label="User Type" 
                   name="type" 
                   value={formData.type} 
                   handleChange={handleChange} 
                   required 
                   options={[
                     {value: "collaborateur", label: "Collaborator"},
-                    {value: "TLorSTL", label: "Team Leader"},
-                    {value: "RH", label: "HR"}
+                   
                   ]}
                 />
                 <InputField 

@@ -83,7 +83,7 @@ export async function POST(request: Request) {
         gender: body.gender,
         department: body.department,
         personalNumber: Number(body.personalNumber),
-        workshours: body.workshours,
+        workshours: Number(body.workshours),
       },
       select: {
         id: true,
@@ -100,13 +100,13 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { 
         data: newUser, 
-        message: "Collaborator created successfully" 
+        message: "Collaborator added successfully" 
       },
       { status: 201 }
     );
 
   } catch (error: any) {
-    console.error("Error creating collaborator:", error);
+    console.error("Error adding a collaborator:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
