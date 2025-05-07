@@ -1,5 +1,3 @@
-import { Home, Calendar, Settings, Map, FileUser } from "lucide-react";
-import Link from "next/link";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
@@ -14,89 +12,62 @@ export default async function CollaboratorsPage() {
       },
     },
   });
+  const loading = collaborators.length === 0;
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gradient-to-b from-green-400 to-blue-500 text-white flex flex-col justify-between">
-        <div className="flex items-center justify-center h-16">
-          <img src="../../booking/image-removebg-preview 4.png" alt="" />
-        </div>
-        <nav className="flex flex-col flex-grow space-y-4">
-          <Link
-            href="/TL_STL/home"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
-          >
-            <Home size="24" />
-            <span>Home</span>
-          </Link>
-
-          <Link
-            href="/TL_STL/spaces"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
-          >
-            <Map size="24" />
-            <span>Spaces</span>
-          </Link>
-
-          <Link
-            href="/TL_STL/collaborators"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
-          >
-            <FileUser size="24" />
-            <span>Collaborators</span>
-          </Link>
-
-          <div className="flex-1"></div>
-          <Link
-            href="/TL_STL/settings"
-            className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2 mt-auto"
-          >
-            <Settings size="24" />
-            <span>Settings</span>
-          </Link>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 p-10 bg-gray-100">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Collaborators</h1>
-          <Link
-            href="/RH/collaborators/add"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-          >
-            + Add Collaborator
-          </Link>
-        </div>
-
-        <div className="overflow-x-auto bg-white rounded-lg shadow">
-          <table className="min-w-full">
-            <thead className="bg-gray-200">
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6">Collaborators</h1> {/* Move the title here */}
+        <div className="bg-white shadow rounded-lg overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <th className="text-left p-4 font-medium">Name</th>
-                <th className="text-left p-4 font-medium">Email</th>
-                <th className="text-left p-4 font-medium">Gender</th>
-                <th className="text-left p-4 font-medium">Department</th>
-                <th className="text-left p-4 font-medium">Work Hours</th>
-                <th className="text-left p-4 font-medium">Reservations</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Department
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Work Hours
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Reservations
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Personal Number
+                </th>
               </tr>
             </thead>
-            <tbody>
-              {collaborators.map((user) => (
-                <tr key={user.id} className="border-t hover:bg-gray-50">
-                  <td className="p-4">{user.name || "-"}</td>
-                  <td className="p-4">{user.email || "-"}</td>
-                  <td className="p-4">{user.gender || "-"}</td>
-                  <td className="p-4">{user.department || "-"}</td>
-                  <td className="p-4">{user.workshours || "-"}</td>
-                  <td className="p-4">{user.Reservation?.length || 0}</td>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {collaborators.length > 0 ? (
+                collaborators.map((c) => (
+                  <tr key={c.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">{c.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{c.email}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{c.department}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{c.workshours}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{c.Reservation?.length || 0}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{c.personalNumber}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-6 py-4 text-center text-gray-500"
+                  >
+                    {loading ? "Loading..." : "No collaborators found"}
+                  </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
