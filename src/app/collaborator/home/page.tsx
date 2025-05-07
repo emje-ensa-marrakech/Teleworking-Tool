@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from "react";
 import { IoLocationSharp } from "react-icons/io5";
@@ -22,8 +22,7 @@ export default function Page() {
   const [data, setData] = useState<Stats | null>(null);
 
   useEffect(() => {
-    const token =
-      localStorage.getItem("token") || sessionStorage.getItem("token");
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     const id = localStorage.getItem("id") || sessionStorage.getItem("id");
 
     fetch(`/api/generale/getStats?id=${id}`, {
@@ -48,40 +47,24 @@ export default function Page() {
   }
 
   return (
-    <>
-      <main className="h-full flex flex-col justify-between p-2">
-        <div className="grid grid-cols-3 gap-4 m-5">
-          <StatCard
-            title="Total spaces:"
-            value={data.total}
-            bg="rgba(120,216,123,0.44)"
-          />
-          <StatCard
-            title="Available Spaces:"
-            value={data.available}
-            bg="rgba(180,244,217,1)"
-          />
-          <StatCard
-            title="Your Bookings:"
-            value={data.your}
-            bg="rgba(146,223,213,1)"
-          />
-        </div>
+    <main className="h-full flex flex-col justify-between p-2">
+      <div className="grid grid-cols-3 gap-4 m-5">
+        <StatCard title="Total Spaces:" value={data.total} bg="rgba(120,216,123,0.44)" />
+        <StatCard title="Available Spaces:" value={data.available} bg="rgba(180,244,217,1)" />
+        <StatCard title="Your Bookings:" value={data.your} bg="rgba(146,223,213,1)" />
+      </div>
 
-        <div className="flex justify-end items-end">
-          <div className="w-[50vw] bg-white p-5 rounded-xl shadow-xs border-2 border-[rgba(6,6,17,0.1)]">
-            <h1 className="text-[rgba(6,6,17,0.6)] mb-5">
-              Reservation History
-            </h1>
-            <div className="grid grid-cols-2">
-              {data.last.map((e, i) =>
-                renderReservation(e.time, e.workspaceName, e.floor, i)
-              )}
-            </div>
+      <div className="flex justify-center items-center w-full my-10">
+        <div className="w-[50vw] bg-white p-5 rounded-xl shadow-xs border-2 border-[rgba(6,6,17,0.1)]">
+          <h2 className="text-[rgba(6,6,17,0.6)] mb-5 text-2xl">Reservation History</h2>
+          <div className="grid grid-cols-2">
+            {data.last.map((e, i) =>
+              renderReservation(e.time, e.workspaceName, e.floor, i)
+            )}
           </div>
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 }
 
@@ -95,7 +78,7 @@ const StatCard = ({
   bg: string;
 }) => (
   <div
-    className="w-[20vw] h-[10vh] flex justify-center items-center flex-col rounded-2xl font-bold"
+    className="w-[20vw] h-[10vh] flex justify-center items-center flex-col rounded-3xl font-bold m-2 py-10"
     style={{ backgroundColor: bg }}
   >
     <h3>{title}</h3>
@@ -103,12 +86,7 @@ const StatCard = ({
   </div>
 );
 
-const renderReservation = (
-  time: string,
-  room: string,
-  floor: string,
-  key: any
-) => {
+const renderReservation = (time: string, room: string, floor: string, key: number) => {
   return (
     <div className="m-2" key={key}>
       <div className="flex items-center">
@@ -125,7 +103,7 @@ const renderReservation = (
         </div>
         <div>
           <h3>{room}</h3>
-          <h6 className="text-sm text-[rgba(6,6,17,0.6)]">{floor}</h6>
+          <h6 className="text-1x1 text-[rgba(6,6,17,0.6)]">{floor}</h6>
         </div>
       </div>
     </div>
