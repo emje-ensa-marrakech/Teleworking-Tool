@@ -4,7 +4,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function ReservationDashboard() {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<{
+    date: Date | null;
+    department: string;
+  }>({
     date: null,
     department: "all",
   });
@@ -19,14 +22,14 @@ export default function ReservationDashboard() {
 
   const [availableSpaces, setAvailableSpaces] = useState<Workspace[]>([]);
 
-  const formatDate = (date) => {
+  const formatDate = (date: Date | null) => {
     if (!date) return null;
     return date.toISOString().split("T")[0]; // yyyy-mm-dd
   };
 
   const fetchAvailableSpaces = async () => {
     const query = new URLSearchParams({
-      date: filters.date ? formatDate(filters.date) : new Date().toISOString().split("T")[0],
+      date: formatDate(filters.date) || new Date().toISOString().split("T")[0],
     });
 
     const res = await fetch(`/api/workspaces?${query}`);
@@ -38,7 +41,7 @@ export default function ReservationDashboard() {
     fetchAvailableSpaces();
   }, [filters.date]);
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e: { target: { name: any; value: any; }; }) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
@@ -54,12 +57,7 @@ export default function ReservationDashboard() {
     <div className="flex h-screen bg-gray-100">
       {/* sidebar omitted for brevity */}
       <main className="flex-1 p-6">
-        <header className="flex justify-end items-center gap-4">
-          <button className="bg-green-600 text-white px-4 py-2 rounded">Reserve room</button>
-          <span>Marwa Rsaim</span>
-          <div className="w-10 h-10 bg-gray-400 rounded-full"></div>
-        </header>
-
+        
         <section className="flex gap-4 justify-center mt-10">
           <DatePicker
             selected={filters.date}

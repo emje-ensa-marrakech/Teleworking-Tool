@@ -49,7 +49,7 @@ export default function Page() {
 
   return (
     <>
-      {Header(data.name)}
+     
 
       <main className="h-full flex flex-col justify-between p-2">
         <div className="grid grid-cols-3 gap-4 m-5">

@@ -73,33 +73,7 @@ export default function AVLSpace() {
 
   return (
     <div className="flex-1 bg-gray-100 min-h-screen">
-      {/* Topbar avec logo agrandi */}
-      <div className="flex flex-col p-5 md:flex-row bg-white justify-between items-center mb-3 shadow-lg">
-        <div className="flex items-center gap-4">
-          <div className="relative w-48 h-16"> {/* Taille du conteneur */}
-            <Image
-              src="/logo.png"
-              alt="AVL Space Logo"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center space-x-4 mt-4 md:mt-0">
-          <div className="bg-green-700 text-white px-4 py-2 rounded-xl">
-            Collaborator
-          </div>
-          <Bell className="text-gray-700 cursor-pointer hover:text-green-600" />
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center text-white font-bold">
-              MR
-            </div>
-            <span>Marwa Rsaim</span>
-          </div>
-        </div>
-      </div>
+      
 
       <div className="p-6">
         {confirmationMessage && (

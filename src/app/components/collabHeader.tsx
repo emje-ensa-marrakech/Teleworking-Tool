@@ -1,17 +1,26 @@
-import Image from "next/image"
-import { IoNotificationsOutline } from "react-icons/io5"
+import Image from "next/image";
+import { Bell } from "lucide-react";
 
-export function Header(userName :string) {
-    return <div className="w-[90vw] h-[fit-content] flex flex-row items-center justify-between pl-5 pr-5 bg-white">
-        <Image src={"/logo.png"} alt="Logo" width={180} height={38} />
-        <div className="flex items-center justify-center ">
-            <div className=" bg-gradient-to-r from-[rgba(69,168,72,0.5)] to-[rgba(1,166,187,0.5)] p-3 rounded-xl mr-3">
-                Reserve Room
-            </div>
-            <IoNotificationsOutline className="mr-3 text-2xl" />
-            <div className="bg-[rgba(74,166,89)] mr-5 ml-2 w-[6vh] h-[6vh] rounded-[50%] font-bold flex justify-center items-center">{userName.substring(0,1)}</div>
-            <h1>{userName}</h1>
+export function Header( {userName}: { userName: string }) {
+  return (
+    <div className="flex flex-col p-5 md:flex-row bg-white justify-between items-center mb-3 shadow-lg">
+      <Image
+        width={100}
+        height={100}
+        src="/logo.png"
+        alt="User"
+        className="w-20 h-25 rounded-2"
+      />
+      <div className="flex items-center space-x-4 mt-4 md:mt-0">
+        <div className="bg-gradient-to-r from-[rgba(69,168,72,0.5)] to-[rgba(1,166,187,0.5)] font-bold text-black px-8 py-2 rounded-xl">
+            Collaborator
         </div>
+        <Bell className="text-gray-700" />
+        <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">
+          {userName.charAt(0).toUpperCase()}
+        </div>
+        <span>{userName}</span>
+      </div>
     </div>
-
+  );
 }
