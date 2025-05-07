@@ -3,29 +3,6 @@
 import { useState, useEffect } from "react";
 import { FaBoxes, FaClock, FaChartLine, FaPercentage } from "react-icons/fa";
 
-const stats = [
-  {
-    title: "Total Rooms",
-    value: 285,
-    icon: <FaBoxes className="text-xl text-gray-600 mr-2" />,
-  },
-  {
-    title: "Pending Approval",
-    value: 120,
-    icon: <FaClock className="text-xl text-yellow-500 mr-2" />,
-  },
-  {
-    title: "Demanded Room this month",
-    value: 89,
-    icon: <FaChartLine className="text-xl text-green-500 mr-2" />,
-  },
-  {
-    title: "Presence Rate",
-    value: "46%",
-    icon: <FaPercentage className="text-xl text-blue-500 mr-2" />,
-  },
-];
-
 interface Workspace {
   id: number;
   name: string;
@@ -91,6 +68,7 @@ export default function AVLSpace() {
 
         if (response.ok) {
           setWorkspaces(data.data);
+          console.log("Fetched workspaces:", data.data);
         } else {
           setError(data.msg || "Failed to fetch workspaces");
         }
@@ -250,6 +228,31 @@ export default function AVLSpace() {
       </div>
     );
   }
+
+  const unavailableCount = workspaces.filter(room => room.status === false).length;
+
+  const stats = [
+    {
+      title: "Total Rooms",
+      value: workspaces.length,
+      icon: <FaBoxes className="text-xl text-gray-600 mr-2" />,
+    },
+    {
+      title: "Pending Approval",
+      value: unavailableCount,
+      icon: <FaClock className="text-xl text-yellow-500 mr-2" />,
+    },
+    {
+      title: "Demanded Room this month",
+      value: 89,
+      icon: <FaChartLine className="text-xl text-green-500 mr-2" />,
+    },
+    {
+      title: "Presence Rate",
+      value: "46%",
+      icon: <FaPercentage className="text-xl text-blue-500 mr-2" />,
+    },
+  ];
 
   if (error) {
     return (
