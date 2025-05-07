@@ -89,9 +89,8 @@ export default function Reservations() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="border-t-4 border-green-500 border-solid rounded-full w-16 h-16 animate-spin"></div>
-        <p className="ml-4 text-xl font-semibold text-green-700">Loading...</p>
+      <div className="min-h-screen bg-gray-100 p-8 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
@@ -170,7 +169,7 @@ export default function Reservations() {
           </div>
           <div className="text-lg font-semibold">
             Available Spaces:{" "}
-            <span className="text-green-600">{22-totalReservations}</span>
+            <span className="text-green-600">{20-totalReservations}</span>
           </div>
         </div>
       </main>
