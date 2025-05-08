@@ -16,6 +16,7 @@ interface Stats {
   available: number;
   your: number;
   last: Reservation[];
+  pending : number
 }
 
 const formatDate = (date: Date | null) => {
@@ -52,7 +53,7 @@ export default function Page() {
   }
 
   return (
-    <main className="h-full flex flex-col justify-between p-2">
+    <main className="h-full flex flex-col  p-2">
       {/* New stat section with more cards */}
       <div className="flex flex-wrap justify-center gap-8 m-5">
         <StatCard title="Total Spaces:" value={data.total} bg="rgba(120, 216, 123, 0.66)" />
@@ -60,7 +61,7 @@ export default function Page() {
         <StatCard title="Available Spaces:" value={data.available} bg="rgb(146, 223, 213)" />
         <div className="w-full flex justify-center gap-8 m-5">
           <StatCard title="Your Bookings:" value={data.your} bg="rgba(121, 212, 191, 0.6)" />
-          <StatCard title="Pending approvals:" value={0} bg="rgba(25, 210, 139, 0.53)" />
+          <StatCard title="Pending approvals:" value={data.pending} bg="rgba(25, 210, 139, 0.53)" />
         </div>
       </div>
 

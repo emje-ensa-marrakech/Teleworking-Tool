@@ -103,6 +103,7 @@ const  fetchSpaces = async () => {
           throw new Error("Failed to submit reservation");
         }
 
+        fetchSpaces()
         setConfirmationMessage(
           `Your reservation request for "${selectedSpace.name}" on ${format(date, "PPP", { locale: fr })} has been submitted. Please wait for HR department confirmation.`
         );
