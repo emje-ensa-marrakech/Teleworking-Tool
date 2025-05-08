@@ -30,6 +30,9 @@ model Reservation {
   id          Int          @id @default(autoincrement())
   time        DateTime     @default(now())
   workspaceID Int
+  workspaceName String?
+  floor String?
+  departement String?
   userId      Int
   confirmed   Boolean
   workspace   Workspace    @relation(fields: [workspaceID], references: [id])

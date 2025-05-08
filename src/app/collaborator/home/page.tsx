@@ -18,6 +18,11 @@ interface Stats {
   last: Reservation[];
 }
 
+const formatDate = (date: Date | null) => {
+  if (!date) return null;
+  return date.toISOString().split("T")[0]; // yyyy-mm-dd
+};
+
 export default function Page() {
   const [data, setData] = useState<Stats | null>(null);
 
@@ -100,7 +105,7 @@ const renderReservation = (time: string, room: string, floor: string, key: numbe
           <PiCalendarDotsFill />
         </div>
         <div>
-          <h3>{time}</h3>
+          <h3>{formatDate(new Date())}</h3>
         </div>
       </div>
       <div className="flex">
