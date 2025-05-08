@@ -22,7 +22,7 @@ export default function ReservationDashboard() {
   }
 
   const [availableSpaces, setAvailableSpaces] = useState<Workspace[]>([]);
-  const [toShow,setShow] = useState<Workspace[]>([])
+  const [toShow, setShow] = useState<Workspace[]>([])
 
   const formatDate = (date: Date | null) => {
     if (!date) return null;
@@ -31,7 +31,7 @@ export default function ReservationDashboard() {
 
   const fetchAvailableSpaces = async () => {
     const query = new URLSearchParams({
-      id :  (localStorage.getItem("id") || sessionStorage.getItem("id"))!,
+      id: (localStorage.getItem("id") || sessionStorage.getItem("id"))!,
     });
 
     const res = await fetch(`/api/collab/history?${query}`, {
@@ -44,33 +44,49 @@ export default function ReservationDashboard() {
     const data = await res.json();
     console.log(data);
     setAvailableSpaces(data);
+    setShow(data)
   };
 
   useEffect(() => {
     fetchAvailableSpaces();
+
   }, []);
 
-  useEffect(
-    ()=>{
+  const compareDates = (d: Date, d2: Date) => {
+    console.log(d.getDate() == d2.getDate());
+
+    if (d.getDate() == d2.getDate())
+      return true
+    return false
+  }
   
-      const filtred : Workspace[] = availableSpaces.filter(
-        (e)=>{
-          if (filters.department == "all" && filters.date){
-            console.log(new Date(e.time) ==  filters.date );
-            
-            return new Date(e.time) ==  filters.date       }   
+  
+  useEffect(
+    () => {
+
+      const filtred: Workspace[] = availableSpaces.filter(
+        (e) => {
+          console.log();
+
+          if (filters.department == "all" && filters.date) {
+            const d2 = filters.date
+            const d = new Date(e.time)
+            return compareDates(d, d2)
+          }
           if (filters.department != "all" && !filters.date)
-            return e.departement == filters.department   
-          if (filters.department != "all" && filters.date)
-            return e.departement == filters.department || e.time ==  filters.date 
-          if  (filters.department != "all" && filters.date) 
-            return true       
+            return e.departement == filters.department
+          if (filters.department != "all" && filters.date) {
+            const d2 = filters.date
+            const d = new Date(e.time)
+            return e.departement == filters.department || compareDates(d, d2)
+          } if (filters.department == "all" && !filters.date)
+            return true
         }
 
       )
       setShow(filtred)
     }
-    ,[filters]
+    , [filters]
   )
 
   const handleFilterChange = (e: { target: { name: any; value: any; }; }) => {
@@ -79,6 +95,7 @@ export default function ReservationDashboard() {
 
   const resetFilters = () => {
     setFilters({ date: null, department: "all" });
+ 
   };
 
   const filteredSpaces = availableSpaces.filter((ws) => {
@@ -125,7 +142,7 @@ export default function ReservationDashboard() {
               </tr>
             </thead>
             <tbody>
-              {filteredSpaces.map((ws) => (
+              {toShow.map((ws) => (
                 <tr key={ws.id} className="text-center border">
                   <td className="p-2 border">{ws.id}</td>
                   <td className="p-2 border">{ws.workspaceName}</td>
