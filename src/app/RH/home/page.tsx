@@ -31,6 +31,8 @@ export default function Dashboard() {
 
   const totalReservations = reservationPerService.reduce((acc, item) => acc + item.value, 0);
 
+  const totalReservationsPerMonth = reservationPerMonth.reduce((acc, item) => acc + item.value, 0); 
+
   useEffect(() => {
     setIsClient(true);
 
@@ -88,7 +90,7 @@ export default function Dashboard() {
       {/* Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Card title="Today Attendance Rate" value="36.2%" />
-        <Card title="Number of New Hires" value="36" />
+        <Card title="Total Reservations per Month" value={totalReservationsPerMonth.toString()} />
         <Card title="Booked Spaces" value={totalReservations.toString()} />
       </div>
 
