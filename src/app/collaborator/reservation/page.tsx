@@ -14,13 +14,15 @@ export default function ReservationDashboard() {
 
   interface Workspace {
     id: string;
-    name: string;
+    workspaceName: string;
     departement: string;
     floor?: string;
-    available: boolean;
+    confirmed: boolean;
+    time: Date;
   }
 
   const [availableSpaces, setAvailableSpaces] = useState<Workspace[]>([]);
+  const [toShow,setShow] = useState<Workspace[]>([])
 
   const formatDate = (date: Date | null) => {
     if (!date) return null;
@@ -29,17 +31,47 @@ export default function ReservationDashboard() {
 
   const fetchAvailableSpaces = async () => {
     const query = new URLSearchParams({
-      date: formatDate(filters.date) || new Date().toISOString().split("T")[0],
+      id :  (localStorage.getItem("id") || sessionStorage.getItem("id"))!,
     });
 
-    const res = await fetch(`/api/workspaces?${query}`);
+    const res = await fetch(`/api/collab/history?${query}`, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': (localStorage.getItem("token") || sessionStorage.getItem("token"))!
+      }
+    });
     const data = await res.json();
+    console.log(data);
     setAvailableSpaces(data);
   };
 
   useEffect(() => {
     fetchAvailableSpaces();
-  }, [filters.date]);
+  }, []);
+
+  useEffect(
+    ()=>{
+  
+      const filtred : Workspace[] = availableSpaces.filter(
+        (e)=>{
+          if (filters.department == "all" && filters.date){
+            console.log(new Date(e.time) ==  filters.date );
+            
+            return new Date(e.time) ==  filters.date       }   
+          if (filters.department != "all" && !filters.date)
+            return e.departement == filters.department   
+          if (filters.department != "all" && filters.date)
+            return e.departement == filters.department || e.time ==  filters.date 
+          if  (filters.department != "all" && filters.date) 
+            return true       
+        }
+
+      )
+      setShow(filtred)
+    }
+    ,[filters]
+  )
 
   const handleFilterChange = (e: { target: { name: any; value: any; }; }) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -57,7 +89,7 @@ export default function ReservationDashboard() {
     <div className="flex h-screen bg-gray-100">
       {/* sidebar omitted for brevity */}
       <main className="flex-1 p-6">
-        
+
         <section className="flex gap-4 justify-center mt-10">
           <DatePicker
             selected={filters.date}
@@ -89,17 +121,17 @@ export default function ReservationDashboard() {
                 <th className="p-2 border">Name</th>
                 <th className="p-2 border">Department</th>
                 <th className="p-2 border">Floor</th>
-                <th className="p-2 border">Available</th>
+                <th className="p-2 border">Time</th>
               </tr>
             </thead>
             <tbody>
               {filteredSpaces.map((ws) => (
                 <tr key={ws.id} className="text-center border">
                   <td className="p-2 border">{ws.id}</td>
-                  <td className="p-2 border">{ws.name}</td>
+                  <td className="p-2 border">{ws.workspaceName}</td>
                   <td className="p-2 border">{ws.departement}</td>
                   <td className="p-2 border">{ws.floor ?? "-"}</td>
-                  <td className="p-2 border">{ws.available}</td>
+                  <td className="p-2 border">{new Date(ws.time).toUTCString()}</td>
                 </tr>
               ))}
             </tbody>
