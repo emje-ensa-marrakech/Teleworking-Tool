@@ -34,6 +34,7 @@ export default function Page() {
       res.json().then((d: Stats) => {
         console.log(d);
         setData(d);
+        console.log(d);
       })
     );
   }, []);

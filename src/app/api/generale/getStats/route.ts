@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
         //         }
         //     }
         // )
-        const avilabe = rooms.filter((e)=>!e.status)
+        const avilabe = rooms.filter((e)=>e.status)
 
         const rese = await prisma.reservation.findMany({})
         const last4 = rese.filter((e)=>e.userId == Number(id)).slice(0,3)
