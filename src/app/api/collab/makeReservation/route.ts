@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
+
     },
   });
 
@@ -68,9 +69,10 @@ export async function POST(req: NextRequest) {
   // Check if the workspace is already reserved for the selected time
   const existingReservation = await prisma.reservation.findFirst({
     where: {
-      
+
       workspaceID: workspaceId,
       time: date,
+
     },
   });
 
@@ -90,6 +92,9 @@ export async function POST(req: NextRequest) {
       workspaceID: workspaceId,
       userId: userId,
       time: date,
+      workspaceName: workspace.name,
+      floor: `${workspace.floor}`,
+
       confirmed: false,
     },
   });

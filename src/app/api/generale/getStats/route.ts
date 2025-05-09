@@ -42,6 +42,7 @@ export async function GET(req: NextRequest) {
         const avilabe = rooms.filter((e)=>e.status)
 
         const rese = await prisma.reservation.findMany({})
+        const pending = rese.filter((e=>!e.confirmed)).length
         const last4 = rese.filter((e)=>e.userId == Number(id)).slice(0,3)
         const resMad = rese.filter((e)=>e.userId == Number(id))
 
@@ -53,7 +54,8 @@ export async function GET(req: NextRequest) {
                 "resMade": rooms.length,
                 "your" : resMad.length,
                 "total" : rooms.length,
-                "last" : last4
+                "last" : last4,
+                "pending" : pending
             }
         )
 

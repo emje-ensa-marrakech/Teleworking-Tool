@@ -217,6 +217,42 @@ export default function AVLSpace() {
     }
   };
 
+  const [notConfirmedCount, setNotConfirmedCount] = useState(0);
+  const [demandedRoomsThisMonth, setDemandedRoomsThisMonth] = useState(0);
+  useEffect(() => {
+    const fetchReservations = async () => {
+      try {
+        const response = await fetch("/api/TLorTLS/get-all-reservations");
+        if (!response.ok) {
+          throw new Error("Failed to fetch reservations");
+        }
+
+        const data = await response.json();
+        const allReservations = data.reservations || [];
+
+        interface Reservation {
+          confirmed: boolean;
+        }
+
+        const notConfirmedCount = allReservations.filter(
+          (reservation: Reservation) => reservation.confirmed === false
+        ).length;
+
+        setNotConfirmedCount(notConfirmedCount);
+
+        const demandedRoomsThisMonth = allReservations.length;
+
+        setDemandedRoomsThisMonth(demandedRoomsThisMonth);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch reservations"
+        );
+      }
+    };
+
+    fetchReservations();
+  }, []);
+
   if (isLoading && workspaces.length === 0) {
     return (
       <div className="flex h-screen bg-gray-100">
@@ -229,7 +265,9 @@ export default function AVLSpace() {
     );
   }
 
-  const unavailableCount = workspaces.filter(room => room.status === false).length;
+  const unavailableCount = workspaces.filter(
+    (room) => room.status === false
+  ).length;
 
   const stats = [
     {
@@ -239,12 +277,12 @@ export default function AVLSpace() {
     },
     {
       title: "Pending Approval",
-      value: unavailableCount,
+      value: notConfirmedCount,
       icon: <FaClock className="text-xl text-yellow-500 mr-2" />,
     },
     {
       title: "Demanded Room this month",
-      value: 89,
+      value: demandedRoomsThisMonth,
       icon: <FaChartLine className="text-xl text-green-500 mr-2" />,
     },
     {
