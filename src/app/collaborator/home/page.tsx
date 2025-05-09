@@ -10,14 +10,6 @@ interface Reservation {
   floor: string;
 }
 
-interface Stats {
-  name: string;
-  total: number;
-  available: number;
-  your: number;
-  last: Reservation[];
-  pending : number
-}
 
 const formatDate = (date: Date | null) => {
   if (!date) return null;
@@ -25,7 +17,7 @@ const formatDate = (date: Date | null) => {
 };
 
 export default function Page() {
-  const [data, setData] = useState<Stats | null>(null);
+  const [data, setData] = useState<any>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -37,7 +29,7 @@ export default function Page() {
         "Content-Type": "application/json",
       },
     }).then((res) =>
-      res.json().then((d: Stats) => {
+      res.json().then((d: any) => {
         console.log(d);
         setData(d);
         console.log(d);
@@ -57,7 +49,7 @@ export default function Page() {
     <main className="h-full flex flex-col  p-2">
       {/* New stat section with more cards */}
       <div className="flex flex-wrap justify-center gap-8 m-5">
-        <StatCard title="Total Spaces:" value={data.total} bg="rgba(120, 216, 123, 0.66)" />
+        <StatCard title="Total Spaces:" value={data.salles} bg="rgba(120, 216, 123, 0.66)" />
         <StatCard title="Total Bookings:" value={data.total} bg="rgb(180, 244, 217)" />
         <StatCard title="Available Spaces:" value={data.available} bg="rgb(146, 223, 213)" />
         <div className="w-full flex justify-center gap-8 m-5">
@@ -71,7 +63,7 @@ export default function Page() {
         <div className="w-[50vw] bg-white p-5 rounded-xl shadow-xs border-2 border-[rgba(6,6,17,0.1)]">
           <h2 className="text-[rgba(6,6,17,0.6)] mb-5 text-2xl">Reservation History</h2>
           <div className="grid grid-cols-2">
-            {data.last.map((e, i) =>
+            {data.last.map((e : any, i : any) =>
               renderReservation(e.time, e.workspaceName, e.floor, i)
             )}
           </div>

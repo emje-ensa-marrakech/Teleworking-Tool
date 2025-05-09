@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
       time: date,
       workspaceName: workspace.name,
       floor: `${workspace.floor}`,
-
+      departement: workspace.departement,
       confirmed: false,
     },
   });

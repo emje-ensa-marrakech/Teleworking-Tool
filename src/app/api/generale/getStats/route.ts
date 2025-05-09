@@ -13,6 +13,13 @@ export async function GET(req: NextRequest) {
 
             }
         )
+
+        const reservation = await prisma.reservation.findMany(
+            {
+                where : {}
+            }
+        )
+
         const user = await prisma.user.findUnique(
             {
                 where : {
@@ -51,9 +58,9 @@ export async function GET(req: NextRequest) {
                 "name": user!.name,
                 // "notifications": notification,
                 "available": avilabe.length,
-                "resMade": rooms.length,
                 "your" : resMad.length,
-                "total" : rooms.length,
+                "total" : reservation.length,
+                "salles" : rooms.length,
                 "last" : last4,
                 "pending" : pending
             }
