@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Home, Calendar, Settings, Map, FileUser } from "lucide-react";
+import { Home, Calendar, Settings, Users } from "lucide-react";
 
-import {Header} from "../components/tlHeader";
+import { Header } from "../components/tlHeader";
 
 interface Stats {
   name: string;
@@ -16,31 +16,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [data, setData] = useState<Stats | null>(null);
-  
-    useEffect(() => {
-      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-      const id = localStorage.getItem("id") || sessionStorage.getItem("id");
-  
-      fetch(`/api/generale/getStats?id=${id}`, {
-        headers: {
-          Authorization: token!,
-          "Content-Type": "application/json",
-        },
-      }).then((res) =>
-        res.json().then((d: Stats) => {
-          console.log(d);
-          setData(d);
-        })
-      );
-    }, []);
 
-    if (!data) {
-      return (<div className="flex items-center justify-center h-screen">
-          <h1 className="text-2xl text-green-400 font-bold">Loading...</h1>
-        </div>
-      );
-    }
+  useEffect(() => {
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    const id = localStorage.getItem("id") || sessionStorage.getItem("id");
 
+    fetch(`/api/generale/getStats?id=${id}`, {
+      headers: {
+        Authorization: token!,
+        "Content-Type": "application/json",
+      },
+    }).then((res) =>
+      res.json().then((d: Stats) => {
+        console.log(d);
+        setData(d);
+      })
+    );
+  }, []);
+
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <h1 className="text-2xl text-green-400 font-bold">Loading...</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-100">
@@ -55,7 +56,7 @@ export default function RootLayout({
         />
         <nav className="flex flex-col flex-grow space-y-4">
           <Link
-            href="/TL_STL/home" 
+            href="/TL_STL/home"
             className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
             <Home size="24" />
@@ -63,21 +64,19 @@ export default function RootLayout({
           </Link>
 
           <Link
-            href="/TL_STL/spaces"
+            href="/TL_STL/booking"
             className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
-            <Map size="24" />
-            <span>Spaces</span>
+            <Calendar size="24" />
+            <span>Booking</span>
           </Link>
 
-          
-
           <Link
-            href="/TL_STL/collaborators"
+            href="/TL_STL/attendance"
             className="flex flex-col items-center space-y-2 rounded-lg cursor-pointer hover:bg-white hover:text-black p-2"
           >
-            <FileUser size="24" />
-            <span>Collaborators</span>
+            <Users size="24" />
+            <span>Attendance</span>
           </Link>
 
           <div className="flex-1"></div>
@@ -91,8 +90,6 @@ export default function RootLayout({
         </nav>
       </aside>
 
-      {/* Header */}
-
       {/* Content Area */}
       <main className="flex-1 overflow-y-auto">
         <Header userName={data.name} />
@@ -100,7 +97,6 @@ export default function RootLayout({
 
         {/* Main Content */}
         {children}
-       
       </main>
     </div>
   );
